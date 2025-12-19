@@ -1,0 +1,4403 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelas Pintar - Portal Kelas Interaktif</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset dan variabel */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4bb543;
+            --warning: #ffcc00;
+            --danger: #dc3545;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Login Page */
+        .login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-logo i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .login-logo h1 {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .login-form .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .login-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .login-form input, .login-form select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .login-form input:focus, .login-form select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover {
+            background: var(--secondary);
+        }
+
+        .login-info {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .login-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: background 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-role {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            min-height: 70vh;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .welcome-section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .welcome-section h2 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .date-info {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-header h3 {
+            color: var(--primary);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(67, 97, 238, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .assignment-list, .schedule-list {
+            list-style: none;
+        }
+
+        .assignment-item, .schedule-item {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .assignment-item:last-child, .schedule-item:last-child {
+            border-bottom: none;
+        }
+
+        .assignment-title {
+            font-weight: 500;
+        }
+
+        .assignment-due {
+            font-size: 0.8rem;
+            color: var(--danger);
+            background: rgba(220, 53, 69, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+        }
+
+        .subject {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subject-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .subject-math { background-color: #4361ee; }
+        .subject-science { background-color: #3a0ca3; }
+        .subject-english { background-color: #7209b7; }
+        .subject-history { background-color: #f72585; }
+        .subject-art { background-color: #4cc9f0; }
+
+        /* Announcements */
+        .announcements {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .announcement-item {
+            padding: 1rem;
+            border-left: 4px solid var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+            margin-bottom: 1rem;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .announcement-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .announcement-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .announcement-date {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Materi Page */
+        .materi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .materi-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .materi-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .materi-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(67, 97, 238, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .materi-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Materi Detail Styles */
+        .materi-detail-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .materi-sidebar {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .materi-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .materi-item {
+            padding: 1rem;
+            border: 1px solid #e9ecef;
+            border-radius: var(--radius);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .materi-item:hover {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .materi-item.active {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .materi-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .materi-item-title {
+            font-weight: 600;
+            color: var(--dark);
+            flex: 1;
+        }
+
+        .materi-item-meta {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .materi-item-desc {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .materi-content {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .materi-header {
+            padding: 2rem;
+            border-bottom: 1px solid #e9ecef;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+
+        .materi-header h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .materi-meta {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .materi-body {
+            padding: 2rem;
+        }
+
+        .materi-section {
+            margin-bottom: 2rem;
+        }
+
+        .materi-section h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .materi-content-text {
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .materi-content-text p {
+            margin-bottom: 1rem;
+        }
+
+        .materi-content-text ul, .materi-content-text ol {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+        }
+
+        .materi-content-text li {
+            margin-bottom: 0.5rem;
+        }
+
+        .materi-example {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border-left: 4px solid var(--primary);
+            margin: 1.5rem 0;
+        }
+
+        .materi-example h5 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .materi-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #e9ecef;
+            background: #f8f9fa;
+        }
+
+        .progress-info {
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Modal Tambah/Edit Materi */
+        .materi-form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .materi-form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .materi-form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: var(--radius);
+            font-size: 1rem;
+        }
+
+        .materi-form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .materi-form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            background: white;
+        }
+
+        /* Tugas Page */
+        .tugas-list {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .tugas-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tugas-item:last-child {
+            border-bottom: none;
+        }
+
+        .tugas-info {
+            flex: 1;
+        }
+
+        .tugas-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .tugas-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Jadwal Page */
+        .jadwal-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .jadwal-table th, .jadwal-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .jadwal-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .jadwal-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .jadwal-table tr:hover {
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        /* Nilai Page */
+        .nilai-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .nilai-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .nilai-progress {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .nilai-progress-bar {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 5px;
+        }
+
+        /* Forum Page */
+        .forum-list {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .forum-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .forum-item:last-child {
+            border-bottom: none;
+        }
+
+        .forum-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .forum-title {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .forum-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        /* Absensi Page */
+        .absensi-section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .absensi-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .absensi-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .absensi-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .absensi-table th, .absensi-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .absensi-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .absensi-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-hadir {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .status-tidak-hadir {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .status-izin {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .status-select {
+            padding: 0.3rem 0.5rem;
+            border-radius: var(--radius);
+            border: 1px solid #ced4da;
+            background: white;
+            cursor: pointer;
+        }
+
+        .edit-input {
+            width: 60px;
+            padding: 0.3rem 0.5rem;
+            border-radius: var(--radius);
+            border: 1px solid #ced4da;
+            text-align: center;
+        }
+
+        /* Admin Only Features */
+        .admin-only {
+            border-left: 4px solid var(--danger);
+            background: rgba(220, 53, 69, 0.05);
+        }
+
+        .user-restricted {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .restricted-overlay {
+            position: relative;
+        }
+
+        .restricted-overlay::after {
+            content: "Hanya untuk Admin";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            z-index: 10;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            color: var(--primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: var(--radius);
+            font-size: 1rem;
+        }
+
+        .file-upload {
+            border: 2px dashed #ced4da;
+            padding: 2rem;
+            text-align: center;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .file-upload i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        /* Kelas Virtual */
+        .virtual-class {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            margin-bottom: 1rem;
+            background: #000;
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .class-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Download Materi */
+        .download-list {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .download-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .download-item:last-child {
+            border-bottom: none;
+        }
+
+        .download-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .download-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius);
+            background: rgba(67, 97, 238, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #495057;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .dashboard-grid, .materi-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                justify-content: center;
+            }
+            
+            .jadwal-table, .absensi-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .tugas-item, .download-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .tugas-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .absensi-controls {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .absensi-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .materi-detail-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .materi-sidebar {
+                position: static;
+                order: 2;
+            }
+            
+            .materi-content {
+                order: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="login-page">
+        <div class="login-container">
+            <div class="login-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>Kelas Pintar</h1>
+            </div>
+            
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Masukkan username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Masukkan password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="role">Login sebagai</label>
+                    <select id="role" required>
+                        <option value="">Pilih peran</option>
+                        <option value="admin">Admin/Guru</option>
+                        <option value="user">Siswa</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="login-btn">Masuk</button>
+            </form>
+            
+            <!-- Info Login -->
+            <div class="login-info" style="display: none;">
+                <h3>Info Login</h3>
+                <p><strong>Admin:</strong> username: admin, password: admin123</p>
+                <p><strong>Siswa:</strong> username: andi, password: andi123</p>
+                <p><strong>Siswa:</strong> username: budi, password: budi123</p>
+                <p><strong>Siswa:</strong> username: citra, password: citra123</p>
+                <p><strong>Siswa:</strong> username: dewi, password: dewi123</p>
+                <p><strong>Siswa:</strong> username: eko, password: eko123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application (Initially Hidden) -->
+    <div id="main-app" style="display: none;">
+        <!-- Header -->
+        <header>
+            <div class="header-container">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h1>Kelas Pintar</h1>
+                </div>
+                
+                <nav>
+                    <ul>
+                        <li><a href="#" class="nav-link active" data-page="dashboard">Dashboard</a></li>
+                        <li><a href="#" class="nav-link" data-page="materi">Materi</a></li>
+                        <li><a href="#" class="nav-link" data-page="tugas">Tugas</a></li>
+                        <li><a href="#" class="nav-link" data-page="jadwal">Jadwal</a></li>
+                        <li><a href="#" class="nav-link" data-page="nilai">Nilai</a></li>
+                        <li><a href="#" class="nav-link" data-page="forum">Forum</a></li>
+                        <li><a href="#" class="nav-link" data-page="absensi">Absensi</a></li>
+                        <li><a href="#" class="nav-link admin-only" data-page="pengaturan">Pengaturan</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="user-menu">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">AS</div>
+                        <div>
+                            <div id="userName">Andi Saputra</div>
+                            <div class="user-role" id="userRole">Siswa</div>
+                        </div>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Keluar
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container">
+            <!-- Dashboard Page -->
+            <section id="dashboard" class="page active">
+                <!-- Welcome Section -->
+                <section class="welcome-section">
+                    <h2 id="welcomeMessage">Selamat Datang di Kelas 12 IPA 1!</h2>
+                    <p>Portal pembelajaran online untuk siswa dan guru. Tetap produktif dan jaga kesehatan!</p>
+                    <div class="date-info">
+                        <i class="far fa-calendar-alt"></i> <span id="currentDate">Senin, 15 April 2024</span>
+                    </div>
+                </section>
+
+                <!-- Dashboard Grid -->
+                <div class="dashboard-grid">
+                    <!-- Tugas Terbaru -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Tugas Terbaru</h3>
+                            <div class="card-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                        </div>
+                        <ul class="assignment-list">
+                            <li class="assignment-item">
+                                <div>
+                                    <div class="assignment-title">Laporan Praktikum Fisika</div>
+                                    <div class="assignment-due">Batas: 18 April</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="assignment-item">
+                                <div>
+                                    <div class="assignment-title">Analisis Puisi "Aku"</div>
+                                    <div class="assignment-due">Batas: 20 April</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="assignment-item">
+                                <div>
+                                    <div class="assignment-title">Presentasi Sejarah Indonesia</div>
+                                    <div class="assignment-due">Batas: 22 April</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Jadwal Hari Ini -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Jadwal Hari Ini</h3>
+                            <div class="card-icon">
+                                <i class="far fa-calendar"></i>
+                            </div>
+                        </div>
+                        <ul class="schedule-list">
+                            <li class="schedule-item">
+                                <div class="subject">
+                                    <div class="subject-color subject-math"></div>
+                                    <span>Matematika</span>
+                                </div>
+                                <span>07:30 - 09:00</span>
+                            </li>
+                            <li class="schedule-item">
+                                <div class="subject">
+                                    <div class="subject-color subject-science"></div>
+                                    <span>Fisika</span>
+                                </div>
+                                <span>09:15 - 10:45</span>
+                            </li>
+                            <li class="schedule-item">
+                                <div class="subject">
+                                    <div class="subject-color subject-english"></div>
+                                    <span>Bahasa Inggris</span>
+                                </div>
+                                <span>11:00 - 12:30</span>
+                            </li>
+                            <li class="schedule-item">
+                                <div class="subject">
+                                    <div class="subject-color subject-art"></div>
+                                    <span>Seni Budaya</span>
+                                </div>
+                                <span>13:30 - 15:00</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Materi Terbaru -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Materi Terbaru</h3>
+                            <div class="card-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                        </div>
+                        <ul class="assignment-list">
+                            <li class="assignment-item">
+                                <div>
+                                    <div class="assignment-title">Turunan Fungsi Aljabar</div>
+                                    <div>Matematika - Bu Sari</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="assignment-item">
+                                <div>
+                                    <div class="assignment-title">Hukum Newton</div>
+                                    <div>Fisika - Pak Budi</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                            <li class="assignment-item">
+                                <div>
+                                    <div class="assignment-title">Present Perfect Tense</div>
+                                    <div>Bahasa Inggris - Ibu Rina</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Pengumuman -->
+                <section class="announcements">
+                    <h3>Pengumuman</h3>
+                    <div class="announcement-item">
+                        <div class="announcement-title">
+                            <span>Ujian Tengah Semester</span>
+                            <span class="announcement-date">12 April 2024</span>
+                        </div>
+                        <p>Ujian Tengah Semester akan dilaksanakan pada tanggal 22-26 April 2024. Silakan persiapkan diri dengan baik.</p>
+                    </div>
+                    <div class="announcement-item">
+                        <div class="announcement-title">
+                            <span>Kegiatan Bakti Sosial</span>
+                            <span class="announcement-date">10 April 2024</span>
+                        </div>
+                        <p>Kelas 12 IPA 1 akan mengadakan kegiatan bakti sosial di Panti Asuhan Kasih Bunda pada tanggal 28 April 2024.</p>
+                    </div>
+                    <div class="announcement-item admin-only">
+                        <div class="announcement-title">
+                            <span>Rapat Guru <small>(Hanya Admin)</small></span>
+                            <span class="announcement-date">8 April 2024</span>
+                        </div>
+                        <p>Rapat guru akan dilaksanakan pada hari Jumat, 19 April 2024 pukul 13.00 di ruang guru.</p>
+                    </div>
+                </section>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="action-btn" id="uploadTugasBtn">
+                        <i class="fas fa-upload"></i>
+                        <span>Upload Tugas</span>
+                    </button>
+                    <button class="action-btn" id="kelasVirtualBtn">
+                        <i class="fas fa-video"></i>
+                        <span>Kelas Virtual</span>
+                    </button>
+                    <button class="action-btn" id="downloadMateriBtn">
+                        <i class="fas fa-file-download"></i>
+                        <span>Download Materi</span>
+                    </button>
+                    <button class="action-btn" id="forumDiskusiBtn">
+                        <i class="fas fa-comments"></i>
+                        <span>Forum Diskusi</span>
+                    </button>
+                    <button class="action-btn" id="lihatNilaiBtn">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Lihat Nilai</span>
+                    </button>
+                    <button class="action-btn" id="absensiBtn">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Absensi</span>
+                    </button>
+                    <button class="action-btn admin-only" id="pengaturanBtn">
+                        <i class="fas fa-cog"></i>
+                        <span>Pengaturan</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Materi Page -->
+            <section id="materi" class="page">
+                <div class="welcome-section">
+                    <h2>Materi Pembelajaran</h2>
+                    <p>Akses semua materi pembelajaran untuk semua mata pelajaran</p>
+                    <div class="admin-only" style="margin-top: 1rem;">
+                        <button class="btn btn-primary" id="tambahMateriBtn">
+                            <i class="fas fa-plus"></i> Tambah Materi
+                        </button>
+                    </div>
+                </div>
+
+                <div class="materi-grid">
+                    <div class="materi-card" data-subject="matematika">
+                        <div class="materi-icon">
+                            <i class="fas fa-square-root-alt"></i>
+                        </div>
+                        <h3>Matematika</h3>
+                        <p>Turunan, Integral, dan Limit</p>
+                        <div class="tugas-meta">
+                            <span><i class="far fa-file"></i> 12 Materi</span>
+                        </div>
+                    </div>
+                    
+                    <div class="materi-card" data-subject="fisika">
+                        <div class="materi-icon">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <h3>Fisika</h3>
+                        <p>Hukum Newton, Gerak, dan Energi</p>
+                        <div class="tugas-meta">
+                            <span><i class="far fa-file"></i> 8 Materi</span>
+                        </div>
+                    </div>
+                    
+                    <div class="materi-card" data-subject="kimia">
+                        <div class="materi-icon">
+                            <i class="fas fa-vial"></i>
+                        </div>
+                        <h3>Kimia</h3>
+                        <p>Struktur Atom dan Ikatan Kimia</p>
+                        <div class="tugas-meta">
+                            <span><i class="far fa-file"></i> 10 Materi</span>
+                        </div>
+                    </div>
+                    
+                    <div class="materi-card" data-subject="biologi">
+                        <div class="materi-icon">
+                            <i class="fas fa-dna"></i>
+                        </div>
+                        <h3>Biologi</h3>
+                        <p>Sel, Genetika, dan Evolusi</p>
+                        <div class="tugas-meta">
+                            <span><i class="far fa-file"></i> 9 Materi</span>
+                        </div>
+                    </div>
+                    
+                    <div class="materi-card" data-subject="indonesia">
+                        <div class="materi-icon">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <h3>Bahasa Indonesia</h3>
+                        <p>Puisi, Prosa, dan Drama</p>
+                        <div class="tugas-meta">
+                            <span><i class="far fa-file"></i> 7 Materi</span>
+                        </div>
+                    </div>
+                    
+                    <div class="materi-card" data-subject="inggris">
+                        <div class="materi-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <h3>Bahasa Inggris</h3>
+                        <p>Grammar, Reading, dan Writing</p>
+                        <div class="tugas-meta">
+                            <span><i class="far fa-file"></i> 11 Materi</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Materi Detail Page -->
+            <section id="materi-detail" class="page">
+                <div class="welcome-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h2 id="materi-detail-title">Detail Materi</h2>
+                            <p id="materi-detail-subject">Mata Pelajaran</p>
+                        </div>
+                        <button class="btn btn-outline" id="kembaliKeMateri">
+                            <i class="fas fa-arrow-left"></i> Kembali ke Materi
+                        </button>
+                    </div>
+                </div>
+
+                <div class="materi-detail-container">
+                    <div class="materi-sidebar">
+                        <h3>Daftar Materi</h3>
+                        <div class="materi-list" id="materiList">
+                            <!-- Daftar materi akan diisi oleh JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="materi-content">
+                        <div class="materi-header">
+                            <h3 id="currentMateriTitle">Judul Materi</h3>
+                            <div class="materi-meta">
+                                <span><i class="far fa-clock"></i> <span id="materiDuration">2 jam</span></span>
+                                <span><i class="fas fa-signal"></i> <span id="materiDifficulty">Menengah</span></span>
+                                <span class="admin-only">
+                                    <button class="btn btn-warning btn-sm" id="editMateriBtn">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="materi-body">
+                            <div id="materiContent">
+                                <!-- Konten materi akan diisi oleh JavaScript -->
+                            </div>
+                            
+                            <div class="materi-actions">
+                                <button class="btn btn-outline" id="prevMateri">
+                                    <i class="fas fa-chevron-left"></i> Sebelumnya
+                                </button>
+                                <div class="progress-info">
+                                    <span>Progress: <span id="progressText">0/12</span></span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" id="nextMateri">
+                                    Selanjutnya <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tugas Page -->
+            <section id="tugas" class="page">
+                <div class="welcome-section">
+                    <h2>Tugas dan PR</h2>
+                    <p>Kelola semua tugas dan PR dari berbagai mata pelajaran</p>
+                    <div class="admin-only" style="margin-top: 1rem;">
+                        <button class="btn btn-primary" id="buatTugasBaruBtn">
+                            <i class="fas fa-plus"></i> Buat Tugas Baru
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tugas-list">
+                    <div class="tugas-item">
+                        <div class="tugas-info">
+                            <h3>Laporan Praktikum Fisika - Hukum Newton</h3>
+                            <p>Buat laporan hasil praktikum hukum Newton dengan format yang telah ditentukan</p>
+                            <div class="tugas-meta">
+                                <span><i class="far fa-calendar"></i> Batas: 18 April 2024</span>
+                                <span><i class="far fa-file"></i> Format: PDF</span>
+                                <span><i class="fas fa-weight"></i> Bobot: 15%</span>
+                            </div>
+                        </div>
+                        <div class="tugas-actions">
+                            <button class="btn btn-primary upload-tugas-btn" data-tugas="Laporan Praktikum Fisika">Upload</button>
+                            <button class="btn btn-outline">Detail</button>
+                            <button class="btn btn-warning admin-only edit-tugas-btn" data-id="1">Edit</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tugas-item">
+                        <div class="tugas-info">
+                            <h3>Analisis Puisi "Aku" - Chairil Anwar</h3>
+                            <p>Analisis struktur dan makna puisi "Aku" karya Chairil Anwar</p>
+                            <div class="tugas-meta">
+                                <span><i class="far fa-calendar"></i> Batas: 20 April 2024</span>
+                                <span><i class="far fa-file"></i> Format: DOC</span>
+                                <span><i class="fas fa-weight"></i> Bobot: 10%</span>
+                            </div>
+                        </div>
+                        <div class="tugas-actions">
+                            <button class="btn btn-primary upload-tugas-btn" data-tugas="Analisis Puisi Aku">Upload</button>
+                            <button class="btn btn-outline">Detail</button>
+                            <button class="btn btn-warning admin-only edit-tugas-btn" data-id="2">Edit</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tugas-item">
+                        <div class="tugas-info">
+                            <h3>Presentasi Sejarah Indonesia - Masa Kolonial</h3>
+                            <p>Buat presentasi tentang masa kolonial Belanda di Indonesia</p>
+                            <div class="tugas-meta">
+                                <span><i class="far fa-calendar"></i> Batas: 22 April 2024</span>
+                                <span><i class="far fa-file"></i> Format: PPT</span>
+                                <span><i class="fas fa-weight"></i> Bobot: 20%</span>
+                            </div>
+                        </div>
+                        <div class="tugas-actions">
+                            <button class="btn btn-primary upload-tugas-btn" data-tugas="Presentasi Sejarah Indonesia">Upload</button>
+                            <button class="btn btn-outline">Detail</button>
+                            <button class="btn btn-warning admin-only edit-tugas-btn" data-id="3">Edit</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tugas-item">
+                        <div class="tugas-info">
+                            <h3>Soal Matematika - Turunan Fungsi</h3>
+                            <p>Selesaikan 20 soal turunan fungsi aljabar dengan cara penyelesaian</p>
+                            <div class="tugas-meta">
+                                <span><i class="far fa-calendar"></i> Batas: 25 April 2024</span>
+                                <span><i class="far fa-file"></i> Format: PDF</span>
+                                <span><i class="fas fa-weight"></i> Bobot: 12%</span>
+                            </div>
+                        </div>
+                        <div class="tugas-actions">
+                            <button class="btn btn-primary upload-tugas-btn" data-tugas="Soal Matematika Turunan">Upload</button>
+                            <button class="btn btn-outline">Detail</button>
+                            <button class="btn btn-warning admin-only edit-tugas-btn" data-id="4">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Jadwal Page -->
+            <section id="jadwal" class="page">
+                <div class="welcome-section">
+                    <h2>Jadwal Pelajaran</h2>
+                    <p>Jadwal pelajaran mingguan Kelas 12 IPA 1</p>
+                    <div class="admin-only" style="margin-top: 1rem;">
+                        <button class="btn btn-primary" id="editJadwalBtn">
+                            <i class="fas fa-edit"></i> Edit Jadwal
+                        </button>
+                    </div>
+                </div>
+
+                <table class="jadwal-table">
+                    <thead>
+                        <tr>
+                            <th>Waktu</th>
+                            <th>Senin</th>
+                            <th>Selasa</th>
+                            <th>Rabu</th>
+                            <th>Kamis</th>
+                            <th>Jumat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>07:30 - 09:00</td>
+                            <td>Matematika</td>
+                            <td>Fisika</td>
+                            <td>Kimia</td>
+                            <td>Matematika</td>
+                            <td>Bahasa Indonesia</td>
+                        </tr>
+                        <tr>
+                            <td>09:15 - 10:45</td>
+                            <td>Fisika</td>
+                            <td>Kimia</td>
+                            <td>Biologi</td>
+                            <td>Fisika</td>
+                            <td>Bahasa Inggris</td>
+                        </tr>
+                        <tr>
+                            <td>11:00 - 12:30</td>
+                            <td>Bahasa Inggris</td>
+                            <td>Matematika</td>
+                            <td>Bahasa Indonesia</td>
+                            <td>Kimia</td>
+                            <td>Sejarah</td>
+                        </tr>
+                        <tr>
+                            <td>13:30 - 15:00</td>
+                            <td>Seni Budaya</td>
+                            <td>PJOK</td>
+                            <td>Prakarya</td>
+                            <td>Biologi</td>
+                            <td>Agama</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Nilai Page -->
+            <section id="nilai" class="page">
+                <div class="welcome-section">
+                    <h2>Nilai Akademik</h2>
+                    <p>Rekap nilai untuk semua mata pelajaran</p>
+                    <div class="admin-only" style="margin-top: 1rem;">
+                        <button class="btn btn-primary" id="kelolaNilaiBtn">
+                            <i class="fas fa-edit"></i> Kelola Nilai
+                        </button>
+                    </div>
+                </div>
+
+                <div class="nilai-card">
+                    <div class="nilai-header">
+                        <h3>Matematika</h3>
+                        <span class="nilai-akhir">85</span>
+                    </div>
+                    <p>Nilai rata-rata: 82 | Peringkat: 5/40</p>
+                    <div class="nilai-progress">
+                        <div class="nilai-progress-bar" style="width: 85%"></div>
+                    </div>
+                </div>
+                
+                <div class="nilai-card">
+                    <div class="nilai-header">
+                        <h3>Fisika</h3>
+                        <span class="nilai-akhir">78</span>
+                    </div>
+                    <p>Nilai rata-rata: 75 | Peringkat: 12/40</p>
+                    <div class="nilai-progress">
+                        <div class="nilai-progress-bar" style="width: 78%"></div>
+                    </div>
+                </div>
+                
+                <div class="nilai-card">
+                    <div class="nilai-header">
+                        <h3>Kimia</h3>
+                        <span class="nilai-akhir">82</span>
+                    </div>
+                    <p>Nilai rata-rata: 79 | Peringkat: 8/40</p>
+                    <div class="nilai-progress">
+                        <div class="nilai-progress-bar" style="width: 82%"></div>
+                    </div>
+                </div>
+                
+                <div class="nilai-card">
+                    <div class="nilai-header">
+                        <h3>Biologi</h3>
+                        <span class="nilai-akhir">88</span>
+                    </div>
+                    <p>Nilai rata-rata: 81 | Peringkat: 3/40</p>
+                    <div class="nilai-progress">
+                        <div class="nilai-progress-bar" style="width: 88%"></div>
+                    </div>
+                </div>
+                
+                <div class="nilai-card">
+                    <div class="nilai-header">
+                        <h3>Bahasa Indonesia</h3>
+                        <span class="nilai-akhir">90</span>
+                    </div>
+                    <p>Nilai rata-rata: 84 | Peringkat: 2/40</p>
+                    <div class="nilai-progress">
+                        <div class="nilai-progress-bar" style="width: 90%"></div>
+                    </div>
+                </div>
+                
+                <div class="nilai-card">
+                    <div class="nilai-header">
+                        <h3>Bahasa Inggris</h3>
+                        <span class="nilai-akhir">86</span>
+                    </div>
+                    <p>Nilai rata-rata: 80 | Peringkat: 4/40</p>
+                    <div class="nilai-progress">
+                        <div class="nilai-progress-bar" style="width: 86%"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Forum Page -->
+            <section id="forum" class="page">
+                <div class="welcome-section">
+                    <h2>Forum Diskusi</h2>
+                    <p>Diskusikan topik pembelajaran dengan guru dan teman sekelas</p>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-primary" id="buatTopikBaruBtn">
+                            <i class="fas fa-plus"></i> Buat Topik Baru
+                        </button>
+                        <button class="btn btn-outline admin-only" id="kelolaForumBtn">
+                            <i class="fas fa-cog"></i> Kelola Forum
+                        </button>
+                    </div>
+                </div>
+
+                <div class="forum-list">
+                    <div class="forum-item">
+                        <div class="forum-header">
+                            <div class="forum-title">Pembahasan Soal Turunan Fungsi</div>
+                            <div class="forum-meta">
+                                <span><i class="far fa-comment"></i> 24</span>
+                                <span><i class="far fa-eye"></i> 156</span>
+                            </div>
+                        </div>
+                        <p>Diskusi tentang penyelesaian soal turunan fungsi aljabar yang sulit dipahami...</p>
+                        <div class="forum-meta">
+                            <span><i class="far fa-user"></i> Bu Sari</span>
+                            <span><i class="far fa-clock"></i> 2 jam yang lalu</span>
+                        </div>
+                    </div>
+                    
+                    <div class="forum-item">
+                        <div class="forum-header">
+                            <div class="forum-title">Persiapan Ujian Tengah Semester</div>
+                            <div class="forum-meta">
+                                <span><i class="far fa-comment"></i> 18</span>
+                                <span><i class="far fa-eye"></i> 203</span>
+                            </div>
+                        </div>
+                        <p>Bagaimana cara belajar yang efektif untuk persiapan UTS? Mari berbagi tips...</p>
+                        <div class="forum-meta">
+                            <span><i class="far fa-user"></i> Andi Saputra</span>
+                            <span><i class="far fa-clock"></i> 1 hari yang lalu</span>
+                        </div>
+                    </div>
+                    
+                    <div class="forum-item">
+                        <div class="forum-header">
+                            <div class="forum-title">Praktikum Fisika - Hukum Newton</div>
+                            <div class="forum-meta">
+                                <span><i class="far fa-comment"></i> 32</span>
+                                <span><i class="far fa-eye"></i> 187</span>
+                            </div>
+                        </div>
+                        <p>Diskusi hasil praktikum hukum Newton dan kendala yang dialami selama praktikum...</p>
+                        <div class="forum-meta">
+                            <span><i class="far fa-user"></i> Pak Budi</span>
+                            <span><i class="far fa-clock"></i> 3 hari yang lalu</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Absensi Page -->
+            <section id="absensi" class="page">
+                <div class="welcome-section">
+                    <h2>Absensi Kelas</h2>
+                    <p>Rekap kehadiran siswa Kelas XI TKJ 2</p>
+                    <div class="admin-only" style="margin-top: 1rem;">
+                        <button class="btn btn-primary" id="tambahSiswaBtn">
+                            <i class="fas fa-user-plus"></i> Tambah Siswa
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Statistik Absensi -->
+                <div class="absensi-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalSiswa">40</div>
+                        <div class="stat-label">Total Siswa</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="hadirHariIni">35</div>
+                        <div class="stat-label">Hadir Hari Ini</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="persentaseKehadiran">87.5%</div>
+                        <div class="stat-label">Persentase Kehadiran</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="hariEfektif">15</div>
+                        <div class="stat-label">Hari Efektif</div>
+                    </div>
+                </div>
+
+                <div class="absensi-section">
+                    <div class="absensi-controls">
+                        <div>
+                            <h3>Rekap Absensi - April 2024</h3>
+                            <p>Total Siswa: <span id="totalSiswaText">40</span> | Hari Efektif: <span id="hariEfektifText">15</span></p>
+                        </div>
+                        <div>
+                            <button class="btn btn-success" id="exportAbsensi">
+                                <i class="fas fa-file-export"></i> Export Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="absensi-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Siswa</th>
+                                <th>Hadir</th>
+                                <th>Izin</th>
+                                <th>Sakit</th>
+                                <th>Alpha</th>
+                                <th>Persentase</th>
+                                <th>Status Hari Ini</th>
+                                <th class="admin-only">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="absensiTableBody">
+                            <!-- Data akan diisi oleh JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="absensi-section">
+                    <div class="absensi-controls">
+                        <h3>Absensi Hari Ini - <span id="currentDateAbsensi">Senin, 15 April 2025</span></h3>
+                        <button class="btn btn-primary admin-only" id="simpanSemuaAbsensi">
+                            <i class="fas fa-save"></i> Simpan Semua Perubahan
+                        </button>
+                    </div>
+                    <table class="absensi-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Siswa</th>
+                                <th>Status</th>
+                                <th class="admin-only">Keterangan</th>
+                                <th class="admin-only">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="absensiHariIniBody">
+                            <!-- Data akan diisi oleh JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Pengaturan Page (Admin Only) -->
+            <section id="pengaturan" class="page">
+                <div class="welcome-section">
+                    <h2>Pengaturan Sistem</h2>
+                    <p>Kelola pengaturan sistem dan konfigurasi kelas</p>
+                </div>
+
+                <div class="absensi-section">
+                    <h3>Manajemen Pengguna</h3>
+                    <div class="tugas-list">
+                        <div class="tugas-item">
+                            <div class="tugas-info">
+                                <h3>Kelola Siswa</h3>
+                                <p>Tambah, edit, dan hapus data siswa serta akun login</p>
+                            </div>
+                            <div class="tugas-actions">
+                                <button class="btn btn-primary" id="kelolaSiswaBtn">
+                                    <i class="fas fa-users"></i> Kelola Siswa
+                                </button>
+                            </div>
+                        </div>
+                        <div class="tugas-item">
+                            <div class="tugas-info">
+                                <h3>Edit Password & Username</h3>
+                                <p>Ubah username dan password untuk semua pengguna</p>
+                            </div>
+                            <div class="tugas-actions">
+                                <button class="btn btn-primary" id="editUserBtn">
+                                    <i class="fas fa-user-edit"></i> Edit Pengguna
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="absensi-section">
+                    <h3>Pengaturan Kelas</h3>
+                    <div class="form-group">
+                        <label for="namaKelas">Nama Kelas</label>
+                        <input type="text" id="namaKelas" class="form-control" value="12 IPA 1">
+                    </div>
+                    <div class="form-group">
+                        <label for="waliKelas">Wali Kelas</label>
+                        <input type="text" id="waliKelas" class="form-control" value="Bu Sari">
+                    </div>
+                    <div class="form-group">
+                        <label for="tahunAjaran">Tahun Ajaran</label>
+                        <input type="text" id="tahunAjaran" class="form-control" value="2023/2024">
+                    </div>
+                    <button class="btn btn-primary" id="simpanPengaturanKelas">Simpan Pengaturan</button>
+                </div>
+
+                <div class="absensi-section">
+                    <h3>Backup Data</h3>
+                    <p>Backup data sistem dan ekspor data penting</p>
+                    <div class="tugas-actions" style="margin-top: 1rem;">
+                        <button class="btn btn-success" id="backupDataBtn">
+                            <i class="fas fa-download"></i> Backup Data
+                        </button>
+                        <button class="btn btn-outline" id="resetDataBtn">
+                            <i class="fas fa-trash"></i> Reset Data
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-container">
+                <div class="footer-section">
+                    <h3>Kelas Pintar</h3>
+                    <p>Portal pembelajaran online untuk mendukung proses belajar mengajar yang efektif dan interaktif.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Tautan Cepat</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" class="nav-link" data-page="dashboard">Dashboard</a></li>
+                        <li><a href="#" class="nav-link" data-page="materi">Materi Pelajaran</a></li>
+                        <li><a href="#" class="nav-link" data-page="jadwal">Jadwal Kelas</a></li>
+                        <li><a href="#" class="nav-link" data-page="absensi">Absensi</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Kontak</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> info@kelaspintar.sch.id</li>
+                        <li><i class="fas fa-phone"></i> (021) 1234-5678</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Jl. Pendidikan No. 123, Jakarta</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2025 Kelas Pintar. Semua hak dilindungi.
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal Tambah/Edit Siswa -->
+    <div id="modalSiswa" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalSiswaTitle">Tambah Siswa Baru</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formSiswa">
+                    <div class="form-group">
+                        <label for="namaSiswa">Nama Lengkap</label>
+                        <input type="text" id="namaSiswa" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="usernameSiswa">Username</label>
+                        <input type="text" id="usernameSiswa" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="passwordSiswa">Password</label>
+                        <input type="password" id="passwordSiswa" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inisialSiswa">Inisial Avatar</label>
+                        <input type="text" id="inisialSiswa" class="form-control" maxlength="2" placeholder="AS" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="batalSiswa">Batal</button>
+                <button class="btn btn-primary" id="simpanSiswa">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Pengguna -->
+    <div id="modalEditUser" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Data Pengguna</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="pilihUser">Pilih Pengguna</label>
+                    <select id="pilihUser" class="form-control">
+                        <option value="">Pilih pengguna</option>
+                    </select>
+                </div>
+                <form id="formEditUser">
+                    <div class="form-group">
+                        <label for="editUsername">Username Baru</label>
+                        <input type="text" id="editUsername" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="editPassword">Password Baru</label>
+                        <input type="password" id="editPassword" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="editNama">Nama Lengkap</label>
+                        <input type="text" id="editNama" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="batalEditUser">Batal</button>
+                <button class="btn btn-primary" id="simpanEditUser">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah/Edit Materi -->
+    <div id="modalMateri" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3 id="modalMateriTitle">Tambah Materi Baru</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formMateri">
+                    <div class="materi-form-group">
+                        <label for="materiSubject">Mata Pelajaran</label>
+                        <select id="materiSubject" class="materi-form-select" required>
+                            <option value="">Pilih Mata Pelajaran</option>
+                            <option value="matematika">Matematika</option>
+                            <option value="fisika">Fisika</option>
+                            <option value="kimia">Kimia</option>
+                            <option value="biologi">Biologi</option>
+                            <option value="indonesia">Bahasa Indonesia</option>
+                            <option value="inggris">Bahasa Inggris</option>
+                        </select>
+                    </div>
+                    <div class="materi-form-group">
+                        <label for="materiTitle">Judul Materi</label>
+                        <input type="text" id="materiTitle" class="materi-form-control" required>
+                    </div>
+                    <div class="materi-form-group">
+                        <label for="materiDuration">Durasi</label>
+                        <input type="text" id="materiDuration" class="materi-form-control" placeholder="Contoh: 2 jam" required>
+                    </div>
+                    <div class="materi-form-group">
+                        <label for="materiDifficulty">Tingkat Kesulitan</label>
+                        <select id="materiDifficulty" class="materi-form-select" required>
+                            <option value="easy">Mudah</option>
+                            <option value="medium">Menengah</option>
+                            <option value="hard">Sulit</option>
+                        </select>
+                    </div>
+                    <div class="materi-form-group">
+                        <label for="materiDescription">Deskripsi Singkat</label>
+                        <textarea id="materiDescription" class="materi-form-control materi-form-textarea" required></textarea>
+                    </div>
+                    <div class="materi-form-group">
+                        <label for="materiTujuan">Tujuan Pembelajaran (pisahkan dengan baris baru)</label>
+                        <textarea id="materiTujuan" class="materi-form-control materi-form-textarea" placeholder="Tujuan 1&#10;Tujuan 2&#10;Tujuan 3" required></textarea>
+                    </div>
+                    <div class="materi-form-group">
+                        <label for="materiTeori">Materi Teori</label>
+                        <textarea id="materiTeori" class="materi-form-control materi-form-textarea" required></textarea>
+                    </div>
+                    <div class="materi-form-group">
+                        <label for="materiContoh">Contoh Soal</label>
+                        <textarea id="materiContoh" class="materi-form-control materi-form-textarea" required></textarea>
+                    </div>
+                    <div class="materi-form-group">
+                        <label for="materiLatihan">Latihan Soal</label>
+                        <textarea id="materiLatihan" class="materi-form-control materi-form-textarea" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="batalMateri">Batal</button>
+                <button class="btn btn-primary" id="simpanMateri">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Upload Tugas -->
+    <div id="modalUploadTugas" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Upload Tugas</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formUploadTugas">
+                    <div class="form-group">
+                        <label for="pilihTugas">Pilih Tugas</label>
+                        <select id="pilihTugas" class="form-control" required>
+                            <option value="">Pilih tugas</option>
+                            <option value="Laporan Praktikum Fisika">Laporan Praktikum Fisika</option>
+                            <option value="Analisis Puisi Aku">Analisis Puisi "Aku"</option>
+                            <option value="Presentasi Sejarah Indonesia">Presentasi Sejarah Indonesia</option>
+                            <option value="Soal Matematika Turunan">Soal Matematika - Turunan Fungsi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fileTugas">File Tugas</label>
+                        <div class="file-upload" id="fileUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Klik untuk memilih file atau seret file ke sini</p>
+                            <input type="file" id="fileTugas" style="display: none;" required>
+                            <div id="fileName" style="margin-top: 10px; font-weight: 500;"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="keteranganTugas">Keterangan (opsional)</label>
+                        <textarea id="keteranganTugas" class="form-control" rows="3" placeholder="Tambahkan keterangan tentang tugas yang diupload..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="batalUploadTugas">Batal</button>
+                <button class="btn btn-primary" id="simpanUploadTugas">Upload Tugas</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Buat Tugas Baru -->
+    <div id="modalBuatTugas" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3 id="modalBuatTugasTitle">Buat Tugas Baru</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formBuatTugas">
+                    <div class="form-group">
+                        <label for="judulTugas">Judul Tugas</label>
+                        <input type="text" id="judulTugas" class="form-control" placeholder="Contoh: Laporan Praktikum Fisika" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deskripsiTugas">Deskripsi Tugas</label>
+                        <textarea id="deskripsiTugas" class="form-control" rows="3" placeholder="Jelaskan detail tugas yang harus dikerjakan..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="mataPelajaranTugas">Mata Pelajaran</label>
+                        <select id="mataPelajaranTugas" class="form-control" required>
+                            <option value="">Pilih Mata Pelajaran</option>
+                            <option value="Matematika">Matematika</option>
+                            <option value="Fisika">Fisika</option>
+                            <option value="Kimia">Kimia</option>
+                            <option value="Biologi">Biologi</option>
+                            <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                            <option value="Bahasa Inggris">Bahasa Inggris</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="batasWaktuTugas">Batas Waktu</label>
+                        <input type="datetime-local" id="batasWaktuTugas" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="formatTugas">Format File</label>
+                        <select id="formatTugas" class="form-control" required>
+                            <option value="">Pilih Format</option>
+                            <option value="PDF">PDF</option>
+                            <option value="DOC/DOCX">DOC/DOCX</option>
+                            <option value="PPT">PPT</option>
+                            <option value="Gambar">Gambar (JPG/PNG)</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bobotTugas">Bobot Nilai (%)</label>
+                        <input type="number" id="bobotTugas" class="form-control" min="1" max="100" placeholder="15" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="batalBuatTugas">Batal</button>
+                <button class="btn btn-primary" id="simpanBuatTugas">Buat Tugas</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Jadwal -->
+    <div id="modalEditJadwal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3>Edit Jadwal Pelajaran</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Pilih Hari dan Waktu yang ingin diedit:</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div>
+                            <label for="hariEdit">Hari</label>
+                            <select id="hariEdit" class="form-control">
+                                <option value="Senin">Senin</option>
+                                <option value="Selasa">Selasa</option>
+                                <option value="Rabu">Rabu</option>
+                                <option value="Kamis">Kamis</option>
+                                <option value="Jumat">Jumat</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="waktuEdit">Waktu</label>
+                            <select id="waktuEdit" class="form-control">
+                                <option value="07:30 - 09:00">07:30 - 09:00</option>
+                                <option value="09:15 - 10:45">09:15 - 10:45</option>
+                                <option value="11:00 - 12:30">11:00 - 12:30</option>
+                                <option value="13:30 - 15:00">13:30 - 15:00</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mataPelajaranEdit">Mata Pelajaran</label>
+                    <select id="mataPelajaranEdit" class="form-control">
+                        <option value="">Pilih Mata Pelajaran</option>
+                        <option value="Matematika">Matematika</option>
+                        <option value="Fisika">Fisika</option>
+                        <option value="Kimia">Kimia</option>
+                        <option value="Biologi">Biologi</option>
+                        <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                        <option value="Bahasa Inggris">Bahasa Inggris</option>
+                        <option value="Sejarah">Sejarah</option>
+                        <option value="Seni Budaya">Seni Budaya</option>
+                        <option value="PJOK">PJOK</option>
+                        <option value="Prakarya">Prakarya</option>
+                        <option value="Agama">Agama</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="guruEdit">Guru Pengampu</label>
+                    <input type="text" id="guruEdit" class="form-control" placeholder="Nama guru pengampu">
+                </div>
+                <div class="form-group">
+                    <label for="ruanganEdit">Ruangan</label>
+                    <input type="text" id="ruanganEdit" class="form-control" placeholder="Contoh: Lab. Fisika">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="batalEditJadwal">Batal</button>
+                <button class="btn btn-primary" id="simpanEditJadwal">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Buat Topik Baru -->
+    <div id="modalBuatTopik" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>Buat Topik Diskusi Baru</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formBuatTopik">
+                    <div class="form-group">
+                        <label for="judulTopik">Judul Topik</label>
+                        <input type="text" id="judulTopik" class="form-control" placeholder="Masukkan judul topik diskusi" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="kategoriTopik">Kategori</label>
+                        <select id="kategoriTopik" class="form-control" required>
+                            <option value="">Pilih Kategori</option>
+                            <option value="Pembelajaran">Pembelajaran</option>
+                            <option value="Tugas">Tugas</option>
+                            <option value="Ujian">Ujian</option>
+                            <option value="Umum">Umum</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="isiTopik">Isi Topik</label>
+                        <textarea id="isiTopik" class="form-control" rows="6" placeholder="Tulis isi topik diskusi di sini..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="lampiranTopik">Lampiran (opsional)</label>
+                        <input type="file" id="lampiranTopik" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="batalBuatTopik">Batal</button>
+                <button class="btn btn-primary" id="simpanBuatTopik">Buat Topik</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Kelola Forum -->
+    <div id="modalKelolaForum" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3>Kelola Forum Diskusi</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <h4>Pengaturan Umum Forum</h4>
+                    <div class="form-check" style="margin-bottom: 1rem;">
+                        <input type="checkbox" id="forumAktif" class="form-check-input" checked>
+                        <label class="form-check-label" for="forumAktif">Forum aktif</label>
+                    </div>
+                    <div class="form-check" style="margin-bottom: 1rem;">
+                        <input type="checkbox" id="moderasiTopik" class="form-check-input">
+                        <label class="form-check-label" for="moderasiTopik">Moderasi topik baru</label>
+                    </div>
+                    <div class="form-check" style="margin-bottom: 1rem;">
+                        <input type="checkbox" id="bolehkanKomentar" class="form-check-input" checked>
+                        <label class="form-check-label" for="bolehkanKomentar">Izinkan komentar</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <h4>Manajemen Topik</h4>
+                    <div class="tugas-list">
+                        <div class="tugas-item">
+                            <div class="tugas-info">
+                                <h5>Pembahasan Soal Turunan Fungsi</h5>
+                                <p>Oleh: Bu Sari | 24 komentar</p>
+                            </div>
+                            <div class="tugas-actions">
+                                <button class="btn btn-warning btn-sm edit-topik-btn">Edit</button>
+                                <button class="btn btn-danger btn-sm hapus-topik-btn">Hapus</button>
+                            </div>
+                        </div>
+                        <div class="tugas-item">
+                            <div class="tugas-info">
+                                <h5>Persiapan Ujian Tengah Semester</h5>
+                                <p>Oleh: Andi Saputra | 18 komentar</p>
+                            </div>
+                            <div class="tugas-actions">
+                                <button class="btn btn-warning btn-sm edit-topik-btn">Edit</button>
+                                <button class="btn btn-danger btn-sm hapus-topik-btn">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <h4>Statistik Forum</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="stat-card">
+                            <div class="stat-value">15</div>
+                            <div class="stat-label">Total Topik</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">247</div>
+                            <div class="stat-label">Total Komentar</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="batalKelolaForum">Batal</button>
+                <button class="btn btn-primary" id="simpanKelolaForum">Simpan Pengaturan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Kelola Nilai -->
+    <div id="modalKelolaNilai" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3>Kelola Nilai Siswa</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="pilihMataPelajaranNilai">Mata Pelajaran</label>
+                    <select id="pilihMataPelajaranNilai" class="form-control">
+                        <option value="">Pilih Mata Pelajaran</option>
+                        <option value="Matematika">Matematika</option>
+                        <option value="Fisika">Fisika</option>
+                        <option value="Kimia">Kimia</option>
+                        <option value="Biologi">Biologi</option>
+                        <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                        <option value="Bahasa Inggris">Bahasa Inggris</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <h4>Daftar Nilai Siswa</h4>
+                    <table class="absensi-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Siswa</th>
+                                <th>Nilai Tugas</th>
+                                <th>Nilai UTS</th>
+                                <th>Nilai UAS</th>
+                                <th>Nilai Akhir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Andi Saputra</td>
+                                <td><input type="number" class="edit-input" value="85"></td>
+                                <td><input type="number" class="edit-input" value="80"></td>
+                                <td><input type="number" class="edit-input" value="90"></td>
+                                <td>85</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Budi Santoso</td>
+                                <td><input type="number" class="edit-input" value="78"></td>
+                                <td><input type="number" class="edit-input" value="75"></td>
+                                <td><input type="number" class="edit-input" value="82"></td>
+                                <td>78</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Citra Lestari</td>
+                                <td><input type="number" class="edit-input" value="92"></td>
+                                <td><input type="number" class="edit-input" value="88"></td>
+                                <td><input type="number" class="edit-input" value="95"></td>
+                                <td>92</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="form-group">
+                    <h4>Pengaturan Bobot Nilai</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label for="bobotTugasNilai">Bobot Tugas (%)</label>
+                            <input type="number" id="bobotTugasNilai" class="form-control" value="30" min="0" max="100">
+                        </div>
+                        <div>
+                            <label for="bobotUTSNilai">Bobot UTS (%)</label>
+                            <input type="number" id="bobotUTSNilai" class="form-control" value="30" min="0" max="100">
+                        </div>
+                        <div>
+                            <label for="bobotUASNilai">Bobot UAS (%)</label>
+                            <input type="number" id="bobotUASNilai" class="form-control" value="40" min="0" max="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="batalKelolaNilai">Batal</button>
+                <button class="btn btn-primary" id="simpanKelolaNilai">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data untuk login - akan diisi dari localStorage atau default
+        let users = {};
+        let siswaData = [];
+        let pengaturanKelas = {
+            namaKelas: "XI TKJ 2",
+            waliKelas: "Bu Erin",
+            tahunAjaran: "2025/2026"
+        };
+
+        // Data jadwal default
+        let jadwalDefault = {
+            'Senin': {
+                '07:30 - 09:00': 'Matematika',
+                '09:15 - 10:45': 'Fisika',
+                '11:00 - 12:30': 'Bahasa Inggris',
+                '13:30 - 15:00': 'Seni Budaya'
+            },
+            'Selasa': {
+                '07:30 - 09:00': 'Fisika',
+                '09:15 - 10:45': 'Kimia',
+                '11:00 - 12:30': 'Matematika',
+                '13:30 - 15:00': 'PJOK'
+            },
+            'Rabu': {
+                '07:30 - 09:00': 'Kimia',
+                '09:15 - 10:45': 'Biologi',
+                '11:00 - 12:30': 'Bahasa Indonesia',
+                '13:30 - 15:00': 'Prakarya'
+            },
+            'Kamis': {
+                '07:30 - 09:00': 'Matematika',
+                '09:15 - 10:45': 'Fisika',
+                '11:00 - 12:30': 'Kimia',
+                '13:30 - 15:00': 'Biologi'
+            },
+            'Jumat': {
+                '07:30 - 09:00': 'Bahasa Indonesia',
+                '09:15 - 10:45': 'Bahasa Inggris',
+                '11:00 - 12:30': 'Sejarah',
+                '13:30 - 15:00': 'Agama'
+            }
+        };
+
+        // Data jadwal yang disimpan (dengan informasi detail)
+        let jadwalData = {};
+
+        // Data materi
+        let materiData = {
+            matematika: {
+                title: "Matematika",
+                topics: "Turunan, Integral, dan Limit",
+                count: 12,
+                materials: [
+                    {
+                        id: 1,
+                        title: "Konsep Limit dan Kekontinuan",
+                        duration: "2 jam",
+                        difficulty: "medium",
+                        description: "Memahami konsep dasar limit fungsi dan sifat kekontinuan fungsi matematika",
+                        content: {
+                            tujuan: [
+                                "Memahami definisi limit fungsi",
+                                "Menganalisis kekontinuan fungsi", 
+                                "Menyelesaikan masalah limit tak hingga"
+                            ],
+                            teori: `
+                                <h4>Pengertian Limit</h4>
+                                <p>Limit adalah nilai yang didekati oleh suatu fungsi ketika variabel independen mendekati suatu titik tertentu.</p>
+                                
+                                <h4>Notasi Limit</h4>
+                                <p>Limit fungsi f(x) ketika x mendekati c ditulis sebagai:</p>
+                                <div class="materi-example">
+                                    <p>lim<sub>x→c</sub> f(x) = L</p>
+                                </div>
+                                
+                                <h4>Kekontinuan Fungsi</h4>
+                                <p>Suatu fungsi f(x) dikatakan kontinu di titik c jika:</p>
+                                <ul>
+                                    <li>f(c) terdefinisi</li>
+                                    <li>lim<sub>x→c</sub> f(x) ada</li>
+                                    <li>lim<sub>x→c</sub> f(x) = f(c)</li>
+                                </ul>
+                            `,
+                            contoh: `
+                                <h4>Contoh 1: Limit Sederhana</h4>
+                                <p>Tentukan nilai lim<sub>x→2</sub> (3x + 1)</p>
+                                <div class="materi-example">
+                                    <p>Penyelesaian:</p>
+                                    <p>lim<sub>x→2</sub> (3x + 1) = 3(2) + 1 = 7</p>
+                                </div>
+                                
+                                <h4>Contoh 2: Limit Fungsi Pecahan</h4>
+                                <p>Tentukan nilai lim<sub>x→1</sub> (x² - 1)/(x - 1)</p>
+                                <div class="materi-example">
+                                    <p>Penyelesaian:</p>
+                                    <p>lim<sub>x→1</sub> (x² - 1)/(x - 1) = lim<sub>x→1</sub> (x + 1) = 2</p>
+                                </div>
+                            `,
+                            latihan: `
+                                <h4>Soal Latihan</h4>
+                                <ol>
+                                    <li>Tentukan lim<sub>x→3</sub> (2x² - 5x + 1)</li>
+                                    <li>Hitung lim<sub>x→0</sub> (sin x)/x</li>
+                                    <li>Selidiki kekontinuan fungsi f(x) = 1/x di x = 0</li>
+                                </ol>
+                            `
+                        },
+                        completed: true
+                    },
+                    {
+                        id: 2,
+                        title: "Turunan Fungsi Aljabar",
+                        duration: "1.5 jam",
+                        difficulty: "easy",
+                        description: "Teknik menghitung turunan untuk fungsi aljabar sederhana dan kompleks",
+                        content: {
+                            tujuan: [
+                                "Menguasai aturan turunan dasar",
+                                "Menghitung turunan fungsi komposisi",
+                                "Aplikasi dalam masalah laju perubahan"
+                            ],
+                            teori: `
+                                <h4>Pengertian Turunan</h4>
+                                <p>Turunan fungsi f(x) terhadap x adalah laju perubahan sesaat dari f(x) terhadap x.</p>
+                                
+                                <h4>Notasi Turunan</h4>
+                                <p>Turunan fungsi f(x) dapat dinotasikan sebagai:</p>
+                                <ul>
+                                    <li>f'(x) (notasi Lagrange)</li>
+                                    <li>df/dx (notasi Leibniz)</li>
+                                    <li>Df(x) (notasi Euler)</li>
+                                </ul>
+                                
+                                <h4>Aturan Dasar Turunan</h4>
+                                <ul>
+                                    <li>Aturan konstanta: d/dx [c] = 0</li>
+                                    <li>Aturan pangkat: d/dx [xⁿ] = nxⁿ⁻¹</li>
+                                    <li>Aturan jumlah: d/dx [f(x) + g(x)] = f'(x) + g'(x)</li>
+                                </ul>
+                            `,
+                            contoh: `
+                                <h4>Contoh 1: Turunan Fungsi Polinomial</h4>
+                                <p>Tentukan turunan dari f(x) = 3x⁴ - 2x² + 5x - 1</p>
+                                <div class="materi-example">
+                                    <p>Penyelesaian:</p>
+                                    <p>f'(x) = 12x³ - 4x + 5</p>
+                                </div>
+                            `,
+                            latihan: `
+                                <h4>Soal Latihan</h4>
+                                <ol>
+                                    <li>Tentukan turunan f(x) = 4x³ - 2x² + x - 5</li>
+                                    <li>Hitung turunan g(x) = (2x + 1)(x - 3)</li>
+                                    <li>Carilah turunan h(x) = √x + 1/x</li>
+                                </ol>
+                            `
+                        },
+                        completed: true
+                    },
+                    {
+                        id: 3,
+                        title: "Turunan Fungsi Trigonometri",
+                        duration: "2 jam",
+                        difficulty: "hard",
+                        description: "Turunan untuk fungsi trigonometri seperti sin, cos, tan, dan turunannya",
+                        content: {
+                            tujuan: [
+                                "Menurunkan fungsi trigonometri",
+                                "Menyelesaikan masalah turunan trigonometri kompleks",
+                                "Aplikasi dalam fisika dan teknik"
+                            ],
+                            teori: `
+                                <h4>Turunan Fungsi Trigonometri Dasar</h4>
+                                <ul>
+                                    <li>d/dx [sin x] = cos x</li>
+                                    <li>d/dx [cos x] = -sin x</li>
+                                    <li>d/dx [tan x] = sec² x</li>
+                                    <li>d/dx [cot x] = -csc² x</li>
+                                    <li>d/dx [sec x] = sec x tan x</li>
+                                    <li>d/dx [csc x] = -csc x cot x</li>
+                                </ul>
+                            `,
+                            contoh: `
+                                <h4>Contoh 1: Turunan sin x</h4>
+                                <p>Tentukan turunan f(x) = sin(3x)</p>
+                                <div class="materi-example">
+                                    <p>Penyelesaian:</p>
+                                    <p>f'(x) = 3 cos(3x)</p>
+                                </div>
+                            `,
+                            latihan: `
+                                <h4>Soal Latihan</h4>
+                                <ol>
+                                    <li>Tentukan turunan f(x) = cos(2x)</li>
+                                    <li>Hitung turunan g(x) = tan(x²)</li>
+                                    <li>Carilah turunan h(x) = sin x cos x</li>
+                                </ol>
+                            `
+                        },
+                        completed: false
+                    }
+                ]
+            },
+            fisika: {
+                title: "Fisika", 
+                topics: "Hukum Newton, Gerak, dan Energi",
+                count: 8,
+                materials: [
+                    {
+                        id: 1,
+                        title: "Kinematika: Gerak Lurus dan Parabola",
+                        duration: "2.5 jam",
+                        difficulty: "medium",
+                        description: "Mempelajari gerak benda tanpa memperhatikan penyebabnya",
+                        content: {
+                            tujuan: [
+                                "Menganalisis gerak 1D dan 2D",
+                                "Memahami konsep kecepatan dan percepatan",
+                                "Menyelesaikan masalah gerak parabola"
+                            ],
+                            teori: `
+                                <h4>Gerak Lurus Beraturan (GLB)</h4>
+                                <p>Gerak dengan kecepatan konstan. Rumus: s = v × t</p>
+                                
+                                <h4>Gerak Lurus Berubah Beraturan (GLBB)</h4>
+                                <p>Gerak dengan percepatan konstan. Rumus:</p>
+                                <ul>
+                                    <li>v = v₀ + at</li>
+                                    <li>s = v₀t + ½at²</li>
+                                    <li>v² = v₀² + 2as</li>
+                                </ul>
+                            `,
+                            contoh: `
+                                <h4>Contoh: Gerak Jatuh Bebas</h4>
+                                <p>Bola jatuh dari ketinggian 80m. Tentukan waktu sampai menyentuh tanah!</p>
+                                <div class="materi-example">
+                                    <p>Penyelesaian:</p>
+                                    <p>s = ½gt²</p>
+                                    <p>80 = ½ × 10 × t²</p>
+                                    <p>t² = 16</p>
+                                    <p>t = 4 detik</p>
+                                </div>
+                            `,
+                            latihan: `
+                                <h4>Soal Latihan</h4>
+                                <ol>
+                                    <li>Mobil bergerak dengan kecepatan 20m/s, berapa jarak setelah 10 detik?</li>
+                                    <li>Benda dilempar vertikal ke atas dengan kecepatan 15m/s, kapan mencapai titik tertinggi?</li>
+                                </ol>
+                            `
+                        },
+                        completed: true
+                    }
+                ]
+            }
+        };
+
+        let currentUser = null;
+        let currentEditId = null;
+        const hariEfektif = 15;
+        let currentEditSiswaId = null;
+        let currentMateriSubject = null;
+        let currentMateriIndex = 0;
+        let currentEditMateriId = null;
+
+        // Fungsi untuk menyimpan data ke localStorage
+        function simpanData() {
+            localStorage.setItem('kelasPintar_users', JSON.stringify(users));
+            localStorage.setItem('kelasPintar_siswaData', JSON.stringify(siswaData));
+            localStorage.setItem('kelasPintar_pengaturanKelas', JSON.stringify(pengaturanKelas));
+            localStorage.setItem('kelasPintar_materiData', JSON.stringify(materiData));
+            console.log('Data berhasil disimpan ke localStorage');
+        }
+
+        // Fungsi untuk memuat data dari localStorage
+        function muatData() {
+            const savedUsers = localStorage.getItem('kelasPintar_users');
+            const savedSiswaData = localStorage.getItem('kelasPintar_siswaData');
+            const savedPengaturan = localStorage.getItem('kelasPintar_pengaturanKelas');
+            const savedMateriData = localStorage.getItem('kelasPintar_materiData');
+
+            // Data default jika tidak ada data di localStorage
+            const defaultUsers = {
+                admin: { password: 'admin123', name: 'Admin Guru', role: 'admin', avatar: 'AG' },
+                andi: { password: 'andi123', name: 'Andi Saputra', role: 'user', avatar: 'AS' },
+                budi: { password: 'budi123', name: 'Budi Santoso', role: 'user', avatar: 'BS' },
+                citra: { password: 'citra123', name: 'Citra Lestari', role: 'user', avatar: 'CL' },
+                dewi: { password: 'dewi123', name: 'Dewi Anggraini', role: 'user', avatar: 'DA' },
+                eko: { password: 'eko123', name: 'Eko Prasetyo', role: 'user', avatar: 'EP' }
+            };
+
+            const defaultSiswaData = [
+                { id: 1, nama: "Andi Saputra", hadir: 12, izin: 1, sakit: 1, alpha: 1, persentase: 80, statusHariIni: "hadir" },
+                { id: 2, nama: "Budi Santoso", hadir: 13, izin: 0, sakit: 2, alpha: 0, persentase: 87, statusHariIni: "hadir" },
+                { id: 3, nama: "Citra Lestari", hadir: 14, izin: 1, sakit: 0, alpha: 0, persentase: 93, statusHariIni: "izin" },
+                { id: 4, nama: "Dewi Anggraini", hadir: 11, izin: 2, sakit: 1, alpha: 1, persentase: 73, statusHariIni: "sakit" },
+                { id: 5, nama: "Eko Prasetyo", hadir: 15, izin: 0, sakit: 0, alpha: 0, persentase: 100, statusHariIni: "hadir" }
+            ];
+
+            const defaultPengaturan = {
+                namaKelas: "12 IPA 1",
+                waliKelas: "Bu Sari",
+                tahunAjaran: "2023/2024"
+            };
+
+            // Gunakan data dari localStorage jika ada, jika tidak gunakan default
+            users = savedUsers ? JSON.parse(savedUsers) : defaultUsers;
+            siswaData = savedSiswaData ? JSON.parse(savedSiswaData) : defaultSiswaData;
+            pengaturanKelas = savedPengaturan ? JSON.parse(savedPengaturan) : defaultPengaturan;
+            materiData = savedMateriData ? JSON.parse(savedMateriData) : materiData;
+
+            // Update UI dengan pengaturan yang dimuat
+            document.getElementById('namaKelas').value = pengaturanKelas.namaKelas;
+            document.getElementById('waliKelas').value = pengaturanKelas.waliKelas;
+            document.getElementById('tahunAjaran').value = pengaturanKelas.tahunAjaran;
+
+            console.log('Data berhasil dimuat dari localStorage');
+        }
+
+        // Fungsi untuk reset data ke default
+        function resetData() {
+            if (confirm('Apakah Anda yakin ingin mereset semua data ke kondisi default? Tindakan ini tidak dapat dibatalkan!')) {
+                localStorage.removeItem('kelasPintar_users');
+                localStorage.removeItem('kelasPintar_siswaData');
+                localStorage.removeItem('kelasPintar_pengaturanKelas');
+                localStorage.removeItem('kelasPintar_materiData');
+                alert('Data berhasil direset. Halaman akan dimuat ulang.');
+                location.reload();
+            }
+        }
+
+        // Fungsi untuk backup data
+        function backupData() {
+            const data = {
+                users: users,
+                siswaData: siswaData,
+                pengaturanKelas: pengaturanKelas,
+                materiData: materiData,
+                timestamp: new Date().toISOString()
+            };
+
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `backup-kelas-pintar-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert('Backup data berhasil didownload!');
+        }
+
+        // Muat data saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            muatData();
+        });
+
+        // Login Functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            
+            // Validasi login
+            if (users[username] && users[username].password === password && users[username].role === role) {
+                currentUser = users[username];
+                showMainApp();
+            } else {
+                alert('Username, password, atau peran tidak valid!');
+            }
+        });
+
+        // Show Main Application
+        function showMainApp() {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            
+            // Update UI based on user role
+            updateUIForUserRole();
+            
+            // Set current date
+            updateCurrentDate();
+            
+            // Load initial data
+            isiDataAbsensi();
+        }
+
+        // Update UI based on user role
+        function updateUIForUserRole() {
+            const isAdmin = currentUser.role === 'admin';
+            
+            // Update user info
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userRole').textContent = isAdmin ? 'Admin/Guru' : 'Siswa';
+            document.getElementById('userAvatar').textContent = currentUser.avatar;
+            document.getElementById('welcomeMessage').textContent = isAdmin ? 
+                'Selamat Datang, Admin!' : 'Selamat Datang di Kelas 12 IPA 1!';
+            
+            // Show/hide admin features
+            const adminElements = document.querySelectorAll('.admin-only');
+            adminElements.forEach(el => {
+                if (isAdmin) {
+                    el.classList.remove('user-restricted');
+                } else {
+                    el.classList.add('user-restricted');
+                }
+            });
+            
+            // Update navigation based on role
+            if (!isAdmin) {
+                const adminNavItems = document.querySelectorAll('nav a.admin-only');
+                adminNavItems.forEach(item => {
+                    item.style.display = 'none';
+                });
+            }
+        }
+
+        // Update current date
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = now.toLocaleDateString('id-ID', options);
+            document.getElementById('currentDate').textContent = dateString;
+            document.getElementById('currentDateAbsensi').textContent = dateString;
+        }
+
+        // Logout Functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                // Simpan data sebelum logout
+                simpanData();
+                currentUser = null;
+                document.getElementById('main-app').style.display = 'none';
+                document.getElementById('login-page').style.display = 'flex';
+                document.getElementById('loginForm').reset();
+            }
+        });
+
+        // Fungsi untuk navigasi antar halaman
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Skip if restricted for user
+                if (this.classList.contains('user-restricted')) {
+                    alert('Fitur ini hanya tersedia untuk Admin/Guru');
+                    return;
+                }
+                
+                // Hapus kelas active dari semua link
+                document.querySelectorAll('.nav-link').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Tambah kelas active ke link yang diklik
+                this.classList.add('active');
+                
+                // Sembunyikan semua halaman
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // Tampilkan halaman yang sesuai
+                const pageId = this.getAttribute('data-page');
+                document.getElementById(pageId).classList.add('active');
+                
+                // Jika halaman absensi, isi data absensi
+                if (pageId === 'absensi') {
+                    isiDataAbsensi();
+                }
+
+                // Jika halaman jadwal, update tabel jadwal dari database
+                if (pageId === 'jadwal') {
+                    updateTabelJadwal();
+                }
+            });
+        });
+
+        // Quick Actions - Implementasi tombol-tombol dari gambar
+        document.getElementById('uploadTugasBtn').addEventListener('click', function() {
+            if (currentUser.role !== 'admin') {
+                alert('Fitur ini hanya tersedia untuk Admin/Guru');
+                return;
+            }
+            
+            // Buka modal upload tugas
+            bukaModalUploadTugas();
+        });
+
+        document.getElementById('kelasVirtualBtn').addEventListener('click', function() {
+            // Navigasi ke halaman kelas virtual
+            document.querySelectorAll('.nav-link').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Buat halaman kelas virtual jika belum ada
+            if (!document.getElementById('kelas-virtual')) {
+                buatHalamanKelasVirtual();
+            }
+            
+            document.getElementById('kelas-virtual').classList.add('active');
+        });
+
+        document.getElementById('downloadMateriBtn').addEventListener('click', function() {
+            // Navigasi ke halaman download materi
+            document.querySelectorAll('.nav-link').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Buat halaman download materi jika belum ada
+            if (!document.getElementById('download-materi')) {
+                buatHalamanDownloadMateri();
+            }
+            
+            document.getElementById('download-materi').classList.add('active');
+        });
+
+        document.getElementById('forumDiskusiBtn').addEventListener('click', function() {
+            // Navigasi ke halaman forum
+            document.querySelectorAll('.nav-link').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.querySelector('a[data-page="forum"]').classList.add('active');
+            document.getElementById('forum').classList.add('active');
+        });
+
+        document.getElementById('lihatNilaiBtn').addEventListener('click', function() {
+            // Navigasi ke halaman nilai
+            document.querySelectorAll('.nav-link').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.querySelector('a[data-page="nilai"]').classList.add('active');
+            document.getElementById('nilai').classList.add('active');
+        });
+
+        document.getElementById('absensiBtn').addEventListener('click', function() {
+            // Navigasi ke halaman absensi
+            document.querySelectorAll('.nav-link').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.querySelector('a[data-page="absensi"]').classList.add('active');
+            document.getElementById('absensi').classList.add('active');
+            isiDataAbsensi();
+        });
+
+        document.getElementById('pengaturanBtn').addEventListener('click', function() {
+            if (currentUser.role !== 'admin') {
+                alert('Fitur ini hanya tersedia untuk Admin/Guru');
+                return;
+            }
+            document.querySelectorAll('.nav-link').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.querySelector('a[data-page="pengaturan"]').classList.add('active');
+            document.getElementById('pengaturan').classList.add('active');
+        });
+
+        // Tombol-tombol tambahan
+        document.getElementById('buatTugasBaruBtn').addEventListener('click', function() {
+            if (currentUser.role !== 'admin') {
+                alert('Fitur ini hanya tersedia untuk Admin/Guru');
+                return;
+            }
+            bukaModalBuatTugas();
+        });
+
+        document.getElementById('editJadwalBtn').addEventListener('click', function() {
+            if (currentUser.role !== 'admin') {
+                alert('Fitur ini hanya tersedia untuk Admin/Guru');
+                return;
+            }
+            bukaModalEditJadwal();
+        });
+
+        document.getElementById('buatTopikBaruBtn').addEventListener('click', function() {
+            bukaModalBuatTopik();
+        });
+
+        document.getElementById('kelolaForumBtn').addEventListener('click', function() {
+            if (currentUser.role !== 'admin') {
+                alert('Fitur ini hanya tersedia untuk Admin/Guru');
+                return;
+            }
+            bukaModalKelolaForum();
+        });
+
+        document.getElementById('kelolaNilaiBtn').addEventListener('click', function() {
+            if (currentUser.role !== 'admin') {
+                alert('Fitur ini hanya tersedia untuk Admin/Guru');
+                return;
+            }
+            bukaModalKelolaNilai();
+        });
+
+        // Fungsi untuk membuka modal upload tugas
+        function bukaModalUploadTugas() {
+            document.getElementById('modalUploadTugas').classList.add('active');
+        }
+
+        // Fungsi untuk membuka modal buat tugas baru
+        function bukaModalBuatTugas() {
+            document.getElementById('modalBuatTugas').classList.add('active');
+        }
+
+        // Fungsi untuk membuka modal edit jadwal
+        function bukaModalEditJadwal() {
+            document.getElementById('modalEditJadwal').classList.add('active');
+        }
+
+        // Fungsi untuk membuka modal buat topik baru
+        function bukaModalBuatTopik() {
+            document.getElementById('modalBuatTopik').classList.add('active');
+        }
+
+        // Fungsi untuk membuka modal kelola forum
+        function bukaModalKelolaForum() {
+            document.getElementById('modalKelolaForum').classList.add('active');
+        }
+
+        // Fungsi untuk membuka modal kelola nilai
+        function bukaModalKelolaNilai() {
+            document.getElementById('modalKelolaNilai').classList.add('active');
+        }
+
+        // Fungsi untuk membuat halaman kelas virtual
+        function buatHalamanKelasVirtual() {
+            const kelasVirtualSection = document.createElement('section');
+            kelasVirtualSection.id = 'kelas-virtual';
+            kelasVirtualSection.className = 'page';
+            
+            kelasVirtualSection.innerHTML = `
+                <div class="welcome-section">
+                    <h2>Kelas Virtual</h2>
+                    <p>Sesi pembelajaran online interaktif dengan guru dan teman sekelas</p>
+                </div>
+                
+                <div class="virtual-class">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    </div>
+                    
+                    <div class="class-controls">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-microphone"></i> Mikrofon
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-video"></i> Kamera
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-comment"></i> Chat
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-hands"></i> Angkat Tangan
+                        </button>
+                        <button class="btn btn-danger">
+                            <i class="fas fa-phone-slash"></i> Keluar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="virtual-class">
+                    <h3>Daftar Peserta</h3>
+                    <div class="tugas-list">
+                        <div class="tugas-item">
+                            <div class="tugas-info">
+                                <h4>Andi Saputra</h4>
+                                <p>Sedang bergabung</p>
+                            </div>
+                            <div class="tugas-actions">
+                                <span class="status-hadir"><i class="fas fa-microphone"></i></span>
+                            </div>
+                        </div>
+                        <div class="tugas-item">
+                            <div class="tugas-info">
+                                <h4>Budi Santoso</h4>
+                                <p>Sedang bergabung</p>
+                            </div>
+                            <div class="tugas-actions">
+                                <span class="status-hadir"><i class="fas fa-microphone-slash"></i></span>
+                            </div>
+                        </div>
+                        <div class="tugas-item">
+                            <div class="tugas-info">
+                                <h4>Citra Lestari</h4>
+                                <p>Sedang bergabung</p>
+                            </div>
+                            <div class="tugas-actions">
+                                <span class="status-hadir"><i class="fas fa-video"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.querySelector('.container').appendChild(kelasVirtualSection);
+        }
+
+        // Fungsi untuk membuat halaman download materi
+        function buatHalamanDownloadMateri() {
+            const downloadMateriSection = document.createElement('section');
+            downloadMateriSection.id = 'download-materi';
+            downloadMateriSection.className = 'page';
+            
+            downloadMateriSection.innerHTML = `
+                <div class="welcome-section">
+                    <h2>Download Materi</h2>
+                    <p>Download materi pembelajaran dalam berbagai format</p>
+                </div>
+                
+                <div class="download-list">
+                    <div class="download-item">
+                        <div class="download-info">
+                            <div class="download-icon">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div>
+                                <h3>Modul Matematika - Turunan</h3>
+                                <p>File PDF - 2.5 MB</p>
+                            </div>
+                        </div>
+                        <div class="tugas-actions">
+                            <button class="btn btn-primary download-file" data-file="Modul Matematika - Turunan.pdf">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="download-item">
+                        <div class="download-info">
+                            <div class="download-icon">
+                                <i class="fas fa-file-powerpoint"></i>
+                            </div>
+                            <div>
+                                <h3>Presentasi Fisika - Hukum Newton</h3>
+                                <p>File PPT - 5.1 MB</p>
+                            </div>
+                        </div>
+                        <div class="tugas-actions">
+                            <button class="btn btn-primary download-file" data-file="Presentasi Fisika - Hukum Newton.ppt">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="download-item">
+                        <div class="download-info">
+                            <div class="download-icon">
+                                <i class="fas fa-file-word"></i>
+                            </div>
+                            <div>
+                                <h3>Lembar Kerja Kimia</h3>
+                                <p>File DOC - 1.2 MB</p>
+                            </div>
+                        </div>
+                        <div class="tugas-actions">
+                            <button class="btn btn-primary download-file" data-file="Lembar Kerja Kimia.doc">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="download-item">
+                        <div class="download-info">
+                            <div class="download-icon">
+                                <i class="fas fa-file-excel"></i>
+                            </div>
+                            <div>
+                                <h3>Data Praktikum Biologi</h3>
+                                <p>File XLS - 0.8 MB</p>
+                            </div>
+                        </div>
+                        <div class="tugas-actions">
+                            <button class="btn btn-primary download-file" data-file="Data Praktikum Biologi.xls">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.querySelector('.container').appendChild(downloadMateriSection);
+            
+            // Tambah event listener untuk tombol download
+            document.querySelectorAll('.download-file').forEach(button => {
+                button.addEventListener('click', function() {
+                    const fileName = this.getAttribute('data-file');
+                    alert(`File "${fileName}" akan segera didownload.`);
+                    // Di sini bisa ditambahkan logika download yang sesungguhnya
+                });
+            });
+        }
+
+        // Fungsi untuk membuka detail materi
+        function bukaDetailMateri(subject) {
+            currentMateriSubject = subject;
+            currentMateriIndex = 0;
+            
+            // Update UI
+            document.getElementById('materi-detail-title').textContent = materiData[subject].title;
+            document.getElementById('materi-detail-subject').textContent = materiData[subject].topics;
+            
+            // Isi daftar materi
+            isiDaftarMateri();
+            
+            // Tampilkan materi pertama
+            tampilkanMateri(0);
+            
+            // Navigasi ke halaman detail
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('materi-detail').classList.add('active');
+        }
+
+        // Fungsi untuk mengisi daftar materi
+        function isiDaftarMateri() {
+            const materiList = document.getElementById('materiList');
+            materiList.innerHTML = '';
+            
+            materiData[currentMateriSubject].materials.forEach((materi, index) => {
+                const materiItem = document.createElement('div');
+                materiItem.className = `materi-item ${index === currentMateriIndex ? 'active' : ''}`;
+                materiItem.innerHTML = `
+                    <div class="materi-item-header">
+                        <div class="materi-item-title">${materi.id}. ${materi.title}</div>
+                        <div class="materi-item-meta">
+                            <span>${materi.duration}</span>
+                            ${materi.completed ? '<i class="fas fa-check-circle" style="color: var(--success);"></i>' : ''}
+                        </div>
+                    </div>
+                    <div class="materi-item-desc">${materi.description}</div>
+                `;
+                
+                materiItem.addEventListener('click', () => {
+                    currentMateriIndex = index;
+                    tampilkanMateri(index);
+                    isiDaftarMateri(); // Refresh untuk update active class
+                });
+                
+                materiList.appendChild(materiItem);
+            });
+        }
+
+        // Fungsi untuk menampilkan materi
+        function tampilkanMateri(index) {
+            const materi = materiData[currentMateriSubject].materials[index];
+            
+            // Update header
+            document.getElementById('currentMateriTitle').textContent = materi.title;
+            document.getElementById('materiDuration').textContent = materi.duration;
+            document.getElementById('materiDifficulty').textContent = 
+                materi.difficulty === 'easy' ? 'Mudah' : 
+                materi.difficulty === 'medium' ? 'Menengah' : 'Sulit';
+            
+            // Update konten
+            const materiContent = document.getElementById('materiContent');
+            materiContent.innerHTML = `
+                <div class="materi-section">
+                    <h4>Tujuan Pembelajaran</h4>
+                    <ul>
+                        ${materi.content.tujuan.map(tujuan => `<li>${tujuan}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="materi-section">
+                    <h4>Materi Teori</h4>
+                    <div class="materi-content-text">
+                        ${materi.content.teori}
+                    </div>
+                </div>
+                
+                <div class="materi-section">
+                    <h4>Contoh Soal</h4>
+                    <div class="materi-content-text">
+                        ${materi.content.contoh}
+                    </div>
+                </div>
+                
+                <div class="materi-section">
+                    <h4>Latihan Soal</h4>
+                    <div class="materi-content-text">
+                        ${materi.content.latihan}
+                    </div>
+                </div>
+            `;
+            
+            // Update progress
+            updateProgress();
+        }
+
+        // Fungsi untuk update progress
+        function updateProgress() {
+            const total = materiData[currentMateriSubject].materials.length;
+            const completed = materiData[currentMateriSubject].materials.filter(m => m.completed).length;
+            const progress = Math.round((completed / total) * 100);
+            
+            document.getElementById('progressText').textContent = `${completed}/${total}`;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            
+            // Update tombol navigasi
+            document.getElementById('prevMateri').disabled = currentMateriIndex === 0;
+            document.getElementById('nextMateri').disabled = currentMateriIndex === total - 1;
+        }
+
+        // Event listener untuk kartu materi
+        document.querySelectorAll('.materi-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const subject = this.getAttribute('data-subject');
+                bukaDetailMateri(subject);
+            });
+        });
+
+        // Event listener untuk navigasi materi
+        document.getElementById('prevMateri').addEventListener('click', function() {
+            if (currentMateriIndex > 0) {
+                currentMateriIndex--;
+                tampilkanMateri(currentMateriIndex);
+                isiDaftarMateri();
+            }
+        });
+
+        document.getElementById('nextMateri').addEventListener('click', function() {
+            const total = materiData[currentMateriSubject].materials.length;
+            if (currentMateriIndex < total - 1) {
+                currentMateriIndex++;
+                tampilkanMateri(currentMateriIndex);
+                isiDaftarMateri();
+            }
+        });
+
+        // Event listener untuk kembali ke daftar materi
+        document.getElementById('kembaliKeMateri').addEventListener('click', function() {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('materi').classList.add('active');
+        });
+
+        // Event listener untuk tambah materi (admin only)
+        document.getElementById('tambahMateriBtn').addEventListener('click', function() {
+            if (currentUser.role !== 'admin') {
+                alert('Fitur ini hanya tersedia untuk Admin/Guru');
+                return;
+            }
+            bukaModalTambahMateri();
+        });
+
+        // Event listener untuk edit materi (admin only)
+        document.getElementById('editMateriBtn').addEventListener('click', function() {
+            if (currentUser.role !== 'admin') {
+                alert('Fitur ini hanya tersedia untuk Admin/Guru');
+                return;
+            }
+            bukaModalEditMateri();
+        });
+
+        // Fungsi untuk membuka modal tambah materi
+        function bukaModalTambahMateri() {
+            document.getElementById('modalMateriTitle').textContent = 'Tambah Materi Baru';
+            document.getElementById('formMateri').reset();
+            currentEditMateriId = null;
+            document.getElementById('modalMateri').classList.add('active');
+        }
+
+        // Fungsi untuk membuka modal edit materi
+        function bukaModalEditMateri() {
+            const materi = materiData[currentMateriSubject].materials[currentMateriIndex];
+            document.getElementById('modalMateriTitle').textContent = 'Edit Materi';
+            
+            // Isi form dengan data materi yang ada
+            document.getElementById('materiSubject').value = currentMateriSubject;
+            document.getElementById('materiTitle').value = materi.title;
+            document.getElementById('materiDuration').value = materi.duration;
+            document.getElementById('materiDifficulty').value = materi.difficulty;
+            document.getElementById('materiDescription').value = materi.description;
+            document.getElementById('materiTujuan').value = materi.content.tujuan.join('\n');
+            document.getElementById('materiTeori').value = materi.content.teori;
+            document.getElementById('materiContoh').value = materi.content.contoh;
+            document.getElementById('materiLatihan').value = materi.content.latihan;
+            
+            currentEditMateriId = materi.id;
+            document.getElementById('modalMateri').classList.add('active');
+        }
+
+        // Event listener untuk simpan materi
+        document.getElementById('simpanMateri').addEventListener('click', function() {
+            const subject = document.getElementById('materiSubject').value;
+            const title = document.getElementById('materiTitle').value;
+            const duration = document.getElementById('materiDuration').value;
+            const difficulty = document.getElementById('materiDifficulty').value;
+            const description = document.getElementById('materiDescription').value;
+            const tujuan = document.getElementById('materiTujuan').value.split('\n').filter(t => t.trim() !== '');
+            const teori = document.getElementById('materiTeori').value;
+            const contoh = document.getElementById('materiContoh').value;
+            const latihan = document.getElementById('materiLatihan').value;
+
+            if (!subject || !title || !duration || !difficulty || !description || tujuan.length === 0 || !teori || !contoh || !latihan) {
+                alert('Semua field harus diisi!');
+                return;
+            }
+
+            if (currentEditMateriId) {
+                // Edit materi yang sudah ada
+                const index = materiData[subject].materials.findIndex(m => m.id === currentEditMateriId);
+                if (index !== -1) {
+                    materiData[subject].materials[index] = {
+                        ...materiData[subject].materials[index],
+                        title,
+                        duration,
+                        difficulty,
+                        description,
+                        content: {
+                            tujuan,
+                            teori,
+                            contoh,
+                            latihan
+                        }
+                    };
+                }
+            } else {
+                // Tambah materi baru
+                const newId = materiData[subject].materials.length > 0 ? 
+                    Math.max(...materiData[subject].materials.map(m => m.id)) + 1 : 1;
+                
+                materiData[subject].materials.push({
+                    id: newId,
+                    title,
+                    duration,
+                    difficulty,
+                    description,
+                    content: {
+                        tujuan,
+                        teori,
+                        contoh,
+                        latihan
+                    },
+                    completed: false
+                });
+
+                // Update count
+                materiData[subject].count = materiData[subject].materials.length;
+            }
+
+            // Simpan data
+            simpanData();
+            
+            alert('Materi berhasil disimpan!');
+            document.getElementById('modalMateri').classList.remove('active');
+            
+            // Refresh tampilan jika sedang melihat materi yang diedit
+            if (currentMateriSubject === subject) {
+                isiDaftarMateri();
+                tampilkanMateri(currentMateriIndex);
+            }
+        });
+
+        // Fungsi untuk mengisi data absensi
+        function isiDataAbsensi() {
+            const absensiTableBody = document.getElementById('absensiTableBody');
+            const absensiHariIniBody = document.getElementById('absensiHariIniBody');
+            const isAdmin = currentUser.role === 'admin';
+            
+            // Kosongkan tabel
+            absensiTableBody.innerHTML = '';
+            absensiHariIniBody.innerHTML = '';
+            
+            // Hitung statistik
+            const totalSiswa = siswaData.length;
+            const hadirHariIni = siswaData.filter(siswa => siswa.statusHariIni === 'hadir').length;
+            const persentaseKehadiran = Math.round((hadirHariIni / totalSiswa) * 100);
+            
+            // Update statistik
+            document.getElementById('totalSiswa').textContent = totalSiswa;
+            document.getElementById('hadirHariIni').textContent = hadirHariIni;
+            document.getElementById('persentaseKehadiran').textContent = `${persentaseKehadiran}%`;
+            document.getElementById('hariEfektif').textContent = hariEfektif;
+            
+            // Update teks
+            document.getElementById('totalSiswaText').textContent = totalSiswa;
+            document.getElementById('hariEfektifText').textContent = hariEfektif;
+            
+            // Isi data rekap absensi
+            siswaData.forEach((siswa, index) => {
+                const row = document.createElement('tr');
+                
+                // Tentukan kelas status berdasarkan persentase
+                let statusClass = '';
+                if (siswa.persentase >= 90) statusClass = 'status-hadir';
+                else if (siswa.persentase >= 75) statusClass = 'status-izin';
+                else statusClass = 'status-tidak-hadir';
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${siswa.nama}</td>
+                    <td>${isAdmin ? `<input type="number" class="edit-input" value="${siswa.hadir}" data-id="${siswa.id}" data-field="hadir">` : siswa.hadir}</td>
+                    <td>${isAdmin ? `<input type="number" class="edit-input" value="${siswa.izin}" data-id="${siswa.id}" data-field="izin">` : siswa.izin}</td>
+                    <td>${isAdmin ? `<input type="number" class="edit-input" value="${siswa.sakit}" data-id="${siswa.id}" data-field="sakit">` : siswa.sakit}</td>
+                    <td>${isAdmin ? `<input type="number" class="edit-input" value="${siswa.alpha}" data-id="${siswa.id}" data-field="alpha">` : siswa.alpha}</td>
+                    <td class="${statusClass}">${siswa.persentase}%</td>
+                    <td>
+                        ${isAdmin ? 
+                            `<select class="status-select" data-id="${siswa.id}">
+                                <option value="hadir" ${siswa.statusHariIni === 'hadir' ? 'selected' : ''}>Hadir</option>
+                                <option value="izin" ${siswa.statusHariIni === 'izin' ? 'selected' : ''}>Izin</option>
+                                <option value="sakit" ${siswa.statusHariIni === 'sakit' ? 'selected' : ''}>Sakit</option>
+                                <option value="alpha" ${siswa.statusHariIni === 'alpha' ? 'selected' : ''}>Alpha</option>
+                            </select>` : 
+                            `<span class="${siswa.statusHariIni === 'hadir' ? 'status-hadir' : siswa.statusHariIni === 'alpha' ? 'status-tidak-hadir' : 'status-izin'}">
+                                ${siswa.statusHariIni === 'hadir' ? 'Hadir' : siswa.statusHariIni === 'izin' ? 'Izin' : siswa.statusHariIni === 'sakit' ? 'Sakit' : 'Alpha'}
+                            </span>`
+                        }
+                    </td>
+                    ${isAdmin ? `
+                    <td>
+                        <button class="btn btn-warning edit-siswa" data-id="${siswa.id}">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-outline hapus-siswa" data-id="${siswa.id}">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </td>` : '<td></td>'}
+                `;
+                
+                absensiTableBody.appendChild(row);
+            });
+            
+            // Isi data absensi hari ini
+            siswaData.forEach((siswa, index) => {
+                const row = document.createElement('tr');
+                
+                // Tentukan kelas status
+                let statusClass = '';
+                let statusText = '';
+                
+                switch(siswa.statusHariIni) {
+                    case 'hadir':
+                        statusClass = 'status-hadir';
+                        statusText = 'Hadir';
+                        break;
+                    case 'izin':
+                        statusClass = 'status-izin';
+                        statusText = 'Izin';
+                        break;
+                    case 'sakit':
+                        statusClass = 'status-izin';
+                        statusText = 'Sakit';
+                        break;
+                    case 'alpha':
+                        statusClass = 'status-tidak-hadir';
+                        statusText = 'Alpha';
+                        break;
+                }
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${siswa.nama}</td>
+                    <td class="${statusClass}">${statusText}</td>
+                    <td>${isAdmin ? `<input type="text" class="form-control" placeholder="Keterangan (opsional)" data-id="${siswa.id}">` : '-'}</td>
+                    <td>${isAdmin ? `<button class="btn btn-primary simpan-status" data-id="${siswa.id}">Simpan</button>` : '-'}</td>
+                `;
+                
+                absensiHariIniBody.appendChild(row);
+            });
+            
+            // Tambahkan event listener untuk admin features
+            if (isAdmin) {
+                // Input edit listener
+                document.querySelectorAll('.edit-input').forEach(input => {
+                    input.addEventListener('change', function() {
+                        const siswaId = parseInt(this.getAttribute('data-id'));
+                        const field = this.getAttribute('data-field');
+                        const value = parseInt(this.value) || 0;
+                        
+                        // Update data siswa
+                        const index = siswaData.findIndex(s => s.id === siswaId);
+                        if (index !== -1) {
+                            siswaData[index][field] = value;
+                            
+                            // Hitung ulang persentase
+                            const totalKehadiran = siswaData[index].hadir + siswaData[index].izin + siswaData[index].sakit + siswaData[index].alpha;
+                            siswaData[index].persentase = Math.round((siswaData[index].hadir / hariEfektif) * 100);
+                            
+                            // Simpan perubahan
+                            simpanData();
+                            
+                            // Update tampilan
+                            isiDataAbsensi();
+                        }
+                    });
+                });
+                
+                // Status select listener
+                document.querySelectorAll('.status-select').forEach(select => {
+                    select.addEventListener('change', function() {
+                        const siswaId = parseInt(this.getAttribute('data-id'));
+                        const status = this.value;
+                        
+                        // Update data siswa
+                        const index = siswaData.findIndex(s => s.id === siswaId);
+                        if (index !== -1) {
+                            siswaData[index].statusHariIni = status;
+                            
+                            // Simpan perubahan
+                            simpanData();
+                        }
+                        
+                        // Update tampilan absensi hari ini
+                        isiDataAbsensi();
+                    });
+                });
+                
+                // Simpan status listener
+                document.querySelectorAll('.simpan-status').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const siswaId = parseInt(this.getAttribute('data-id'));
+                        const keterangan = document.querySelector(`input[data-id="${siswaId}"]`).value;
+                        
+                        // Simpan perubahan
+                        simpanData();
+                        
+                        alert(`Status absensi untuk siswa ID ${siswaId} berhasil disimpan!${keterangan ? ` Keterangan: ${keterangan}` : ''}`);
+                    });
+                });
+
+                // Edit siswa listener
+                document.querySelectorAll('.edit-siswa').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const siswaId = parseInt(this.getAttribute('data-id'));
+                        bukaModalEditSiswa(siswaId);
+                    });
+                });
+
+                // Hapus siswa listener
+                document.querySelectorAll('.hapus-siswa').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const siswaId = parseInt(this.getAttribute('data-id'));
+                        hapusSiswa(siswaId);
+                    });
+                });
+            }
+        }
+
+        // Export data absensi
+        document.getElementById('exportAbsensi').addEventListener('click', function() {
+            if (currentUser.role !== 'admin') {
+                alert('Fitur ini hanya tersedia untuk Admin/Guru');
+                return;
+            }
+            alert('Data absensi berhasil diexport ke format Excel!');
+        });
+
+        // Simpan semua perubahan absensi
+        document.getElementById('simpanSemuaAbsensi').addEventListener('click', function() {
+            if (currentUser.role !== 'admin') {
+                alert('Fitur ini hanya tersedia untuk Admin/Guru');
+                return;
+            }
+            
+            // Simpan semua perubahan
+            simpanData();
+            alert('Semua perubahan absensi berhasil disimpan!');
+        });
+
+        // Modal functionality
+        const modalSiswa = document.getElementById('modalSiswa');
+        const modalEditUser = document.getElementById('modalEditUser');
+        const modalMateri = document.getElementById('modalMateri');
+        const modalUploadTugas = document.getElementById('modalUploadTugas');
+        const modalBuatTugas = document.getElementById('modalBuatTugas');
+        const modalEditJadwal = document.getElementById('modalEditJadwal');
+        const modalBuatTopik = document.getElementById('modalBuatTopik');
+        const modalKelolaForum = document.getElementById('modalKelolaForum');
+        const modalKelolaNilai = document.getElementById('modalKelolaNilai');
+
+        // Tambah siswa
+        document.getElementById('tambahSiswaBtn').addEventListener('click', function() {
+            if (currentUser.role !== 'admin') {
+                alert('Fitur ini hanya tersedia untuk Admin/Guru');
+                return;
+            }
+            bukaModalTambahSiswa();
+        });
+
+        // Kelola siswa
+        document.getElementById('kelolaSiswaBtn').addEventListener('click', function() {
+            document.querySelectorAll('.nav-link').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.querySelector('a[data-page="absensi"]').classList.add('active');
+            document.getElementById('absensi').classList.add('active');
+            isiDataAbsensi();
+        });
+
+        // Edit pengguna
+        document.getElementById('editUserBtn').addEventListener('click', function() {
+            bukaModalEditUser();
+        });
+
+        // Simpan pengaturan kelas
+        document.getElementById('simpanPengaturanKelas').addEventListener('click', function() {
+            pengaturanKelas.namaKelas = document.getElementById('namaKelas').value;
+            pengaturanKelas.waliKelas = document.getElementById('waliKelas').value;
+            pengaturanKelas.tahunAjaran = document.getElementById('tahunAjaran').value;
+            
+            simpanData();
+            alert('Pengaturan kelas berhasil disimpan!');
+        });
+
+        // Backup data
+        document.getElementById('backupDataBtn').addEventListener('click', function() {
+            backupData();
+        });
+
+        // Reset data
+        document.getElementById('resetDataBtn').addEventListener('click', function() {
+            resetData();
+        });
+
+        function bukaModalTambahSiswa() {
+            document.getElementById('modalSiswaTitle').textContent = 'Tambah Siswa Baru';
+            document.getElementById('formSiswa').reset();
+            currentEditSiswaId = null;
+            modalSiswa.classList.add('active');
+        }
+
+        function bukaModalEditSiswa(siswaId) {
+            const siswa = siswaData.find(s => s.id === siswaId);
+            if (siswa) {
+                document.getElementById('modalSiswaTitle').textContent = 'Edit Data Siswa';
+                document.getElementById('namaSiswa').value = siswa.nama;
+                
+                // Cari username berdasarkan nama
+                const username = Object.keys(users).find(key => users[key].name === siswa.nama);
+                if (username) {
+                    document.getElementById('usernameSiswa').value = username;
+                    document.getElementById('passwordSiswa').value = users[username].password;
+                    document.getElementById('inisialSiswa').value = users[username].avatar;
+                }
+                
+                currentEditSiswaId = siswaId;
+                modalSiswa.classList.add('active');
+            }
+        }
+
+        function bukaModalEditUser() {
+            // Isi dropdown dengan daftar pengguna
+            const selectUser = document.getElementById('pilihUser');
+            selectUser.innerHTML = '<option value="">Pilih pengguna</option>';
+            
+            Object.keys(users).forEach(username => {
+                const option = document.createElement('option');
+                option.value = username;
+                option.textContent = `${users[username].name} (${username}) - ${users[username].role}`;
+                selectUser.appendChild(option);
+            });
+            
+            document.getElementById('formEditUser').reset();
+            modalEditUser.classList.add('active');
+        }
+
+        // Simpan data siswa
+        document.getElementById('simpanSiswa').addEventListener('click', function() {
+            const nama = document.getElementById('namaSiswa').value;
+            const username = document.getElementById('usernameSiswa').value;
+            const password = document.getElementById('passwordSiswa').value;
+            const inisial = document.getElementById('inisialSiswa').value;
+
+            if (!nama || !username || !password || !inisial) {
+                alert('Semua field harus diisi!');
+                return;
+            }
+
+            if (currentEditSiswaId) {
+                // Edit siswa yang sudah ada
+                const index = siswaData.findIndex(s => s.id === currentEditSiswaId);
+                if (index !== -1) {
+                    siswaData[index].nama = nama;
+                    
+                    // Update data user
+                    const oldUsername = Object.keys(users).find(key => users[key].name === siswaData[index].nama);
+                    if (oldUsername) {
+                        delete users[oldUsername];
+                    }
+                    
+                    users[username] = {
+                        password: password,
+                        name: nama,
+                        role: 'user',
+                        avatar: inisial
+                    };
+                }
+            } else {
+                // Tambah siswa baru
+                const newId = siswaData.length > 0 ? Math.max(...siswaData.map(s => s.id)) + 1 : 1;
+                siswaData.push({
+                    id: newId,
+                    nama: nama,
+                    hadir: 0,
+                    izin: 0,
+                    sakit: 0,
+                    alpha: 0,
+                    persentase: 0,
+                    statusHariIni: "hadir"
+                });
+
+                // Tambah user baru
+                users[username] = {
+                    password: password,
+                    name: nama,
+                    role: 'user',
+                    avatar: inisial
+                };
+            }
+
+            // Simpan data
+            simpanData();
+            
+            alert('Data siswa berhasil disimpan!');
+            modalSiswa.classList.remove('active');
+            isiDataAbsensi();
+        });
+
+        // Simpan edit user
+        document.getElementById('simpanEditUser').addEventListener('click', function() {
+            let selectedUser = document.getElementById('pilihUser').value;
+            const newUsername = document.getElementById('editUsername').value;
+            const newPassword = document.getElementById('editPassword').value;
+            const newNama = document.getElementById('editNama').value;
+
+            if (!selectedUser) {
+                alert('Pilih pengguna terlebih dahulu!');
+                return;
+            }
+
+            if (!newUsername && !newPassword && !newNama) {
+                alert('Isi minimal satu field yang ingin diubah!');
+                return;
+            }
+
+            if (newUsername && newUsername !== selectedUser) {
+                if (users[newUsername]) {
+                    alert('Username sudah digunakan!');
+                    return;
+                }
+                users[newUsername] = users[selectedUser];
+                delete users[selectedUser];
+                selectedUser = newUsername;
+            }
+
+            if (newPassword) {
+                users[selectedUser].password = newPassword;
+            }
+
+            if (newNama) {
+                users[selectedUser].name = newNama;
+                
+                // Update juga di data absensi jika ada
+                const siswaIndex = siswaData.findIndex(s => s.nama === users[selectedUser].name);
+                if (siswaIndex !== -1) {
+                    siswaData[siswaIndex].nama = newNama;
+                }
+            }
+
+            // Simpan data
+            simpanData();
+            
+            alert('Data pengguna berhasil diupdate!');
+            modalEditUser.classList.remove('active');
+            isiDataAbsensi();
+        });
+
+        // Hapus siswa
+        function hapusSiswa(siswaId) {
+            if (!confirm('Apakah Anda yakin ingin menghapus siswa ini?')) {
+                return;
+            }
+
+            const index = siswaData.findIndex(s => s.id === siswaId);
+            if (index !== -1) {
+                const namaSiswa = siswaData[index].nama;
+                
+                // Hapus dari data siswa
+                siswaData.splice(index, 1);
+                
+                // Hapus dari data users
+                const username = Object.keys(users).find(key => users[key].name === namaSiswa && users[key].role === 'user');
+                if (username) {
+                    delete users[username];
+                }
+                
+                // Simpan data
+                simpanData();
+                
+                alert('Siswa berhasil dihapus!');
+                isiDataAbsensi();
+            }
+        }
+
+        // Event listener untuk modal close
+        document.querySelectorAll('.close-modal, .btn-outline').forEach(button => {
+            button.addEventListener('click', function() {
+                modalSiswa.classList.remove('active');
+                modalEditUser.classList.remove('active');
+                modalMateri.classList.remove('active');
+                modalUploadTugas.classList.remove('active');
+                modalBuatTugas.classList.remove('active');
+                modalEditJadwal.classList.remove('active');
+                modalBuatTopik.classList.remove('active');
+                modalKelolaForum.classList.remove('active');
+                modalKelolaNilai.classList.remove('active');
+            });
+        });
+
+        // Event listener untuk pilih user
+        document.getElementById('pilihUser').addEventListener('change', function() {
+            const selectedUser = this.value;
+            if (selectedUser && users[selectedUser]) {
+                document.getElementById('editUsername').value = selectedUser;
+                document.getElementById('editNama').value = users[selectedUser].name;
+                document.getElementById('editPassword').value = '';
+            }
+        });
+
+        // Event listener untuk upload tugas
+        document.getElementById('fileUploadArea').addEventListener('click', function() {
+            document.getElementById('fileTugas').click();
+        });
+
+        document.getElementById('fileTugas').addEventListener('change', function() {
+            const fileName = this.files[0] ? this.files[0].name : 'Belum ada file dipilih';
+            document.getElementById('fileName').textContent = fileName;
+        });
+
+        document.getElementById('simpanUploadTugas').addEventListener('click', function() {
+            const pilihTugas = document.getElementById('pilihTugas').value;
+            const fileTugas = document.getElementById('fileTugas').files[0];
+            const keterangan = document.getElementById('keteranganTugas').value;
+
+            if (!pilihTugas || !fileTugas) {
+                alert('Pilih tugas dan file terlebih dahulu!');
+                return;
+            }
+
+            alert(`Tugas "${pilihTugas}" berhasil diupload!${keterangan ? ` Keterangan: ${keterangan}` : ''}`);
+            modalUploadTugas.classList.remove('active');
+            document.getElementById('formUploadTugas').reset();
+            document.getElementById('fileName').textContent = '';
+        });
+
+        // Event listener untuk upload tugas dari halaman tugas
+        document.querySelectorAll('.upload-tugas-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const tugas = this.getAttribute('data-tugas');
+                document.getElementById('pilihTugas').value = tugas;
+                bukaModalUploadTugas();
+            });
+        });
+
+        // Event listener untuk buat tugas baru
+        document.getElementById('simpanBuatTugas').addEventListener('click', function() {
+            const judul = document.getElementById('judulTugas').value;
+            const deskripsi = document.getElementById('deskripsiTugas').value;
+            const mataPelajaran = document.getElementById('mataPelajaranTugas').value;
+            const batasWaktu = document.getElementById('batasWaktuTugas').value;
+            const format = document.getElementById('formatTugas').value;
+            const bobot = document.getElementById('bobotTugas').value;
+
+            if (!judul || !deskripsi || !mataPelajaran || !batasWaktu || !format || !bobot) {
+                alert('Semua field harus diisi!');
+                return;
+            }
+
+            alert(`Tugas baru "${judul}" berhasil dibuat untuk mata pelajaran ${mataPelajaran}!`);
+            modalBuatTugas.classList.remove('active');
+            document.getElementById('formBuatTugas').reset();
+        });
+
+        // Fungsi untuk memperbarui tabel jadwal di halaman dari database
+        async function updateTabelJadwal() {
+            const jadwalTable = document.querySelector('.jadwal-table tbody');
+            if (!jadwalTable) return;
+
+            try {
+                // Ambil data jadwal dari database
+                const response = await fetch('http://localhost:3000/api/jadwal');
+                const jadwalDariDatabase = await response.json();
+                
+                // Konversi array ke object berdasarkan hari dan waktu
+                const jadwalMap = {};
+                jadwalDariDatabase.forEach(item => {
+                    jadwalMap[`${item.hari}-${item.waktu}`] = item;
+                });
+
+                const hariArray = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
+                const waktuArray = ['07:30 - 09:00', '09:15 - 10:45', '11:00 - 12:30', '13:30 - 15:00'];
+
+                // Clear existing rows
+                jadwalTable.innerHTML = '';
+
+                // Recreate rows
+                waktuArray.forEach(waktu => {
+                    const row = document.createElement('tr');
+                    const waktuCell = document.createElement('td');
+                    waktuCell.textContent = waktu;
+                    row.appendChild(waktuCell);
+
+                    hariArray.forEach(hari => {
+                        const cell = document.createElement('td');
+                        const kunci = `${hari}-${waktu}`;
+                        
+                        // Cek apakah ada perubahan jadwal di database
+                        if (jadwalMap[kunci]) {
+                            cell.textContent = jadwalMap[kunci].mataPelajaran;
+                        } else {
+                            // Gunakan jadwal default
+                            cell.textContent = jadwalDefault[hari][waktu];
+                        }
+                        
+                        row.appendChild(cell);
+                    });
+
+                    jadwalTable.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error memperbarui tabel jadwal:', error);
+                // Jika error, tampilkan jadwal default
+                tampilkanJadwalDefault();
+            }
+        }
+
+        // Fungsi untuk menampilkan jadwal default jika database tidak tersedia
+        function tampilkanJadwalDefault() {
+            const jadwalTable = document.querySelector('.jadwal-table tbody');
+            if (!jadwalTable) return;
+
+            const hariArray = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
+            const waktuArray = ['07:30 - 09:00', '09:15 - 10:45', '11:00 - 12:30', '13:30 - 15:00'];
+
+            jadwalTable.innerHTML = '';
+
+            waktuArray.forEach(waktu => {
+                const row = document.createElement('tr');
+                const waktuCell = document.createElement('td');
+                waktuCell.textContent = waktu;
+                row.appendChild(waktuCell);
+
+                hariArray.forEach(hari => {
+                    const cell = document.createElement('td');
+                    cell.textContent = jadwalDefault[hari][waktu];
+                    row.appendChild(cell);
+                });
+
+                jadwalTable.appendChild(row);
+            });
+        }
+
+        // Event listener untuk edit jadwal - Simpan ke Database
+        document.getElementById('simpanEditJadwal').addEventListener('click', async function() {
+            const hari = document.getElementById('hariEdit').value;
+            const waktu = document.getElementById('waktuEdit').value;
+            const mataPelajaran = document.getElementById('mataPelajaranEdit').value;
+            const guru = document.getElementById('guruEdit').value;
+            const ruangan = document.getElementById('ruanganEdit').value;
+
+            if (!mataPelajaran) {
+                alert('Pilih mata pelajaran terlebih dahulu!');
+                return;
+            }
+
+            try {
+                // Kirim data ke server untuk disimpan ke database
+                const response = await fetch('http://localhost:3000/api/jadwal', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        hari: hari,
+                        waktu: waktu,
+                        mataPelajaran: mataPelajaran,
+                        guru: guru || null,
+                        ruangan: ruangan || null
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(`Jadwal ${hari} ${waktu} berhasil diubah menjadi ${mataPelajaran}${guru ? ` oleh ${guru}` : ''}${ruangan ? ` di ${ruangan}` : ''}`);
+                    
+                    // Update tabel jadwal
+                    await updateTabelJadwal();
+
+                    // Close modal
+                    modalEditJadwal.classList.remove('active');
+
+                    // Reset form
+                    document.getElementById('hariEdit').value = 'Senin';
+                    document.getElementById('waktuEdit').value = '07:30 - 09:00';
+                    document.getElementById('mataPelajaranEdit').value = '';
+                    document.getElementById('guruEdit').value = '';
+                    document.getElementById('ruanganEdit').value = '';
+                } else {
+                    alert('Error: ' + (result.error || 'Gagal menyimpan jadwal'));
+                }
+            } catch (error) {
+                console.error('Error menyimpan jadwal:', error);
+                alert('Error: Tidak dapat terhubung ke server. Pastikan server berjalan di port 3000.');
+            }
+        });
+
+        // Event listener untuk buat topik baru
+        document.getElementById('simpanBuatTopik').addEventListener('click', function() {
+            const judul = document.getElementById('judulTopik').value;
+            const kategori = document.getElementById('kategoriTopik').value;
+            const isi = document.getElementById('isiTopik').value;
+
+            if (!judul || !kategori || !isi) {
+                alert('Judul, kategori, dan isi topik harus diisi!');
+                return;
+            }
+
+            alert(`Topik diskusi "${judul}" berhasil dibuat!`);
+            modalBuatTopik.classList.remove('active');
+            document.getElementById('formBuatTopik').reset();
+        });
+
+        // Event listener untuk kelola forum
+        document.getElementById('simpanKelolaForum').addEventListener('click', function() {
+            const forumAktif = document.getElementById('forumAktif').checked;
+            const moderasiTopik = document.getElementById('moderasiTopik').checked;
+            const bolehkanKomentar = document.getElementById('bolehkanKomentar').checked;
+
+            alert(`Pengaturan forum berhasil disimpan!\nForum aktif: ${forumAktif ? 'Ya' : 'Tidak'}\nModerasi topik: ${moderasiTopik ? 'Ya' : 'Tidak'}\nKomentar diizinkan: ${bolehkanKomentar ? 'Ya' : 'Tidak'}`);
+            modalKelolaForum.classList.remove('active');
+        });
+
+        // Event listener untuk kelola nilai
+        document.getElementById('simpanKelolaNilai').addEventListener('click', function() {
+            const mataPelajaran = document.getElementById('pilihMataPelajaranNilai').value;
+            const bobotTugas = document.getElementById('bobotTugasNilai').value;
+            const bobotUTS = document.getElementById('bobotUTSNilai').value;
+            const bobotUAS = document.getElementById('bobotUASNilai').value;
+
+            if (!mataPelajaran) {
+                alert('Pilih mata pelajaran terlebih dahulu!');
+                return;
+            }
+
+            alert(`Nilai untuk mata pelajaran ${mataPelajaran} berhasil disimpan!\nBobot: Tugas ${bobotTugas}%, UTS ${bobotUTS}%, UAS ${bobotUAS}%`);
+            modalKelolaNilai.classList.remove('active');
+        });
+
+        // Simpan data saat window/tab ditutup
+        window.addEventListener('beforeunload', function() {
+            simpanData();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "web-absen-app",
+  "version": "1.0.0",
+  "description": "Aplikasi Portal Pembelajaran dengan Manajemen Jadwal Database",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "learning",
+    "portal",
+    "schedule",
+    "attendance"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6",
+    "cors": "^2.8.5"
+  }
+}
